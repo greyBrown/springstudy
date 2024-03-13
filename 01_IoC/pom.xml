@@ -19,8 +19,8 @@
   
   <!-- deploy file (배포 파일) 이름 : artifactId + version + packaging -->
   
-  <!-- springframework 버전 : 2022년 04월 버전 -->
-	<properties>
+  <!-- springframework 버전 : 2022년 04월 버전 //폼 복사할때 여기 프로퍼티부터 복사하면 됨. 그리고 fimalname 바꿔주기. 메이븐 업데이트 프로젝트 잊지말기~~-->
+	<properties> 
 		<java-version>11</java-version>
 		<org.springframework-version>5.3.19</org.springframework-version>
 		<org.aspectj-version>1.9.19</org.aspectj-version>
@@ -30,10 +30,10 @@
    <!--
    Maven Project
    1. pom.xml 에 등록된 <dependency> 태그에 의해 필요한 라이브러리(jar)가 다운로드 된다.
-   2. C:\Users\계정멸\.m2 디렉터리에 라이브러리가 저장되어 있다.
+   2. C:\Users\계정명\.m2 디렉터리에 라이브러리가 저장되어 있다.
    3. 라이브러리에 문제가 발생하면 아래 순서로 해결한다.
     1) Spring Tool Suite 을 끈다.
-    2) C:\Users\계정멸\.m2 디렉터리를 지운다.
+    2) C:\Users\계정명\.m2 디렉터리를 지운다.
     3) Spring Tool Suite 를 켠다. (이 때 모두 다시 다운로드 된다.)
     4) 프로젝트 우클릭 메뉴 - [Maven] - [Update Project]를 선택한다.
     -->
