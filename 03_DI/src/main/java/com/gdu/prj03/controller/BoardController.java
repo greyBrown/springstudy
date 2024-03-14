@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.gdu.prj03.service.BoardService;
 
+import lombok.RequiredArgsConstructor;
+
 //       @Controller  @Service  @Repository
 //view - controller - service - dao
-
+@RequiredArgsConstructor
 @Controller      //Controller 에서 사용하는 @Component
 public class BoardController {
   
@@ -31,17 +33,33 @@ public class BoardController {
 //  @Autowired
 //  private BoardService boardService;
   
-  //2. 생성자 주입
-  // 1) 생성자의 매개변수로 주입된다.
-  // 2) @Autowired를 생략할 수 있다. (생성자주입에서만 생략가능)
-  private BoardService boardService;
+//  2. 생성자 주입
+//   1) 생성자의 매개변수로 주입된다.
+//   2) @Autowired를 생략할 수 있다. (생성자주입에서만 생략가능)
+//  private BoardService boardService;
+//  
+//  public BoardController(BoardService boardService) {
+//   super();
+//   this.boardService = boardService;
+//  }
+//  
+// 3. setter 주입
+//  1) 메소드의 매개변수로 주입된다.
+//  2) @Autowired 를 생략할 수 없다.
+//  3) 사실 메소드명은 상관이 없다.
+// private BoardService boardService;
+// @Autowired
+//  public void setBoardService(BoardService boardService) {
+//    this.boardService = boardService;
+//  }
   
-  public BoardController(BoardService boardService) {
-   super();
-   this.boardService = boardService;
-  }
+   // 앞으로 사용할 한 가지 방식
+   // final 필드 + 생성자 주입(lombok의 @RequiredArgsConstructor를 이용해서 매개변수의 null 체크를 수행함)       >> gh 왜 static 안붙이냐? 계속 메모리에 로드되어있는 static은 성능에 문제를 일으킬 수 있다.
+  
+  private final BoardService boardService;
   
   
+
   // 타입은 인터페이스로 선언! 왠지 들을 때마다 생소해서 적어놓는다... 특히 스프링에서는 인터페이스 구현시 인터페이스를 보고 인터페이스 타입을 보고 결정해주기 때문에 인터페이스 타입~~ 
   // 스프링은 문법이 딱딱한...정형화된 프레임워크라 볼 수 있음. 하란대로 해야함
   @GetMapping("/board/list.do")

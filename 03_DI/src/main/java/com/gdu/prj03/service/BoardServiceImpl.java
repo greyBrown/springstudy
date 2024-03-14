@@ -2,11 +2,14 @@ package com.gdu.prj03.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gdu.prj03.dao.BoardDao;
 import com.gdu.prj03.dto.BoardDto;
+
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 
 //       @Controller  @Service  @Repository
 //view - controller - service - dao
@@ -14,8 +17,7 @@ import com.gdu.prj03.dto.BoardDto;
 @Service         //Service 에서 사용하는 @Component
 public class BoardServiceImpl implements BoardService {
 
-  @Autowired
-  private BoardDao boardDao;
+  private final BoardDao boardDao;
     
   
   @Override

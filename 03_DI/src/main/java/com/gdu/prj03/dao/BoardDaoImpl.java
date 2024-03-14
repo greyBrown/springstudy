@@ -7,6 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import com.gdu.prj03.dto.BoardDto;
 
+import lombok.NoArgsConstructor;
+
+
 // @Component
 // Spring Container(IoC Container)에 bean을 생성해 둔다.
 // Component Scan 에 의해서 검색할 수 있다. (servlet-context.xml)
