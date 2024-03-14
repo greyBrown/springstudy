@@ -4,9 +4,16 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>board list</title>
+<title>Insert title here</title>
 </head>
 <body>
+
+  <div>${user.userNo}</div>
+  <div>${user.userEmail}</div>
+  
+
+
+
 
 </body>
 </html>
