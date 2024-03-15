@@ -25,7 +25,7 @@ public class BoardController {
    *    3) setter 주입
    * 4. 사용 가능한 annotation
    *    1) @inject
-   *    2) @Resouce, @Qulifier
+   *    2) @Resource, @Qulifier
    *    3) @Autowired  (대부분 이걸 사용한다. 사실 다 이걸 사용한다.) 
    */
   
