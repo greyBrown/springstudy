@@ -38,7 +38,7 @@ public class BoardController3 {
   @GetMapping("/detail.do")
   public ResponseEntity<BoardDto> detail(int boardNo){  //requestparam 생략
     HttpHeaders header = new HttpHeaders();
-    header.add("Content-Type", "application/json");
+    header.add("Content-Type", "application/json");          // 요 데이터 종류를 바꾸면 다른 데이터를 받는 것도 가넝합니다! 여러가지 받을 수 있어요.
     
     return new ResponseEntity<BoardDto>(boardService.getBoardByNo(boardNo), header, HttpStatus.OK);
   }
