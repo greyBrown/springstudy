@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.gdu.prj.mybatis.mapper.student_t">
+
+ <insert id="insertStudent"
+          parameterType="StudentDto">
+    INSERT INTO STUDENT_T (
+        STU_NO
+        , NAME
+        , KOREAN
+        , ENGLISH
+        , MATH
+    ) VALUES (
+        STUDENT_SEQ.NEXTVAL
+      , #{name}
+      , #{korean}
+      , #{english}
+      , #{math}
+    ) 
+  </insert>
+  
+  <update id="updateStudent"
+          parameterType="StudentDto">
+          
+       UPDATE STUDENT_T SET 
+         NAME = #{name}
+       , KOREAN = #{korean}
+       , ENGLISH = #{english}
+       , MATH = #{math}
+       WHERE STU_NO = #{studentNo}
+            
+          
+          
+  </update>        
+  
+
+</mapper>

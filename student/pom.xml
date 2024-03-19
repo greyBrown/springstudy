@@ -17,6 +17,8 @@
   </properties>
   
   <dependencies>
+  
+    
       <!-- https://mvnrepository.com/artifact/org.bgee.log4jdbc-log4j2/log4jdbc-log4j2-jdbc4.1 -->
     <dependency>
         <groupId>org.bgee.log4jdbc-log4j2</groupId>

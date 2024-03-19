@@ -71,7 +71,7 @@ public class ContactServiceImpl implements ContactService {
       out.println("<script>");
       if(updateCount == 1 ) {
         out.println("alert('연락처가 수정되었습니다.')");
-        out.println("location.href='"+request.getContextPath() +"/contact/detail.do'");
+        out.println("location.href='" + request.getContextPath() + "/contact/detail.do?contact-no=" + contactNo + "'");  // redirect 를 의미하는 코드
       } else {
         out.println("alert('등록에 실패하였습니다.')");
         out.println("history.back()");
@@ -90,7 +90,7 @@ public class ContactServiceImpl implements ContactService {
   @Override
   public void removeContact(HttpServletRequest request, HttpServletResponse response) {
     // 삭제(성공 -> 목록보기, 실패 -> 뒤로가기)
-    int contactNo = Integer.parseInt(request.getParameter("contactNo"));
+    int contactNo = Integer.parseInt(request.getParameter("contact-no"));
     int deleteCount = contactDao.removeContact(contactNo);
     response.setContentType("text/html; charset=UTF-8");
     try {
@@ -109,11 +109,6 @@ public class ContactServiceImpl implements ContactService {
     } catch (Exception e) {
         e.printStackTrace();
     }
-    
-   
-    
-    
-    
     
   }
 

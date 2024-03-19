@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
-  
-  <!-- Root Context: defines shared resources visible to all other web components -->
-    
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		
   <bean class="com.zaxxer.hikari.HikariConfig"
         id="hikariConfig"
         scope="singleton">
@@ -24,8 +24,8 @@
         id="sqlSessionFactoryBean"
         scope="singleton">
     <property name="dataSource" ref="hikariDataSource"/>
-    <property name="configLocation"  value="classpath:com/gdu/prj05/mybatis/config/mybatis-config.xml"/>
-    <property name="mapperLocations" value="classpath:com/gdu/prj05/mybatis/mapper/*.xml"/>
+    <property name="configLocation"  value="classpath:com/gdu/prj/mybatis/config/mybatis-config.xml"/>
+    <property name="mapperLocations" value="classpath:com/gdu/prj/mybatis/mapper/*.xml"/>
   </bean>
   
   <bean class="org.mybatis.spring.SqlSessionTemplate"
@@ -34,8 +34,8 @@
     <constructor-arg ref="sqlSessionFactoryBean"/>
   </bean>
   
-  <bean class="com.gdu.prj05.dao.ContactDaoImpl"
-        id="contactDao"
+  <bean class="com.gdu.prj.dao.StudentDaoImpl"
+        id="studentDao"
         scope="singleton">
     <constructor-arg ref="sqlSessionTemplate"/>
   </bean>
