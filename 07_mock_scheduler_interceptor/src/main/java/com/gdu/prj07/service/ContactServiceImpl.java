@@ -20,7 +20,7 @@ public class ContactServiceImpl implements ContactService {
   
   
   @Override
-  public void registerContact(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
+  public void registerContact(HttpServletRequest request, HttpServletResponse response) {
     // 등록할 ContactDto 생성
     ContactDto contact = ContactDto.builder()
                            .name(request.getParameter("name"))
@@ -31,7 +31,8 @@ public class ContactServiceImpl implements ContactService {
     
     // 등록
       int insertCount = contactDao.registerContact(contact);
-      redirectAttributes.addFlashAttribute("insertCount", insertCount);
+      
+      
     // 등록 결과에 따른 응답
     response.setContentType("text/html; charset=UTF-8");
     try {

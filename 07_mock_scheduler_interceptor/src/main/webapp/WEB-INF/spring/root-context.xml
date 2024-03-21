@@ -50,6 +50,13 @@
     <constructor-arg ref="contactDao" />
   </bean>
 
+    <bean class="com.gdu.prj07.controller.ContactController"
+            id="contactController"
+            scope="singleton">
+        <constructor-arg ref="contactService" />
+      </bean>
+
+
   <!-- 트랜잭션 관리자 등록 -->
   <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
         id="dataSourceTransactionManager"

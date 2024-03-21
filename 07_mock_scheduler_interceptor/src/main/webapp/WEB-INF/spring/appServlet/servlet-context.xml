@@ -27,6 +27,30 @@
   
   <!-- @Scheduled 허용 -->
 	<task:annotation-driven/>
-	
-	
+  
+  <!-- 인터셉터 등록(뷰리졸버처럼, 여기서 bean으로 만들어주는 문법) -->
+  <beans:bean class="com.gdu.prj07.interceptor.ContactInterceptor"
+                 id="contactInterceptor"
+              scope="singleton"/>
+  
+  <!-- mapping 에 따른 인터셉터 등록(상세보기 할 때, contactInterceptor가 동작할 것이다) -->
+  <interceptors>
+    <interceptor>
+      <mapping path="/contact/detail.do"/>
+      <beans:ref bean="contactInterceptor"/>
+    </interceptor>
+  </interceptors>
+  
+	  <!-- 연습: 로그인체크 인터셉터 -->
+  <beans:bean class="com.gdu.prj07.interceptor.LoginCkInterceptor"
+                 id="loginCkInterceptor"
+              scope="singleton"/>
+  <interceptors>
+    <interceptor>
+      <mapping path="/contact/write.do"/>
+      <beans:ref bean="loginCkInterceptor"/>
+    </interceptor>
+  </interceptors>
+  
+  
 </beans:beans>
