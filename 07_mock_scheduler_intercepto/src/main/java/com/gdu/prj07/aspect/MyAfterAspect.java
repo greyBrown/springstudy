@@ -1,4 +1,4 @@
-package com.gdu.prj06.aspect;
+package com.gdu.prj07.aspect;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MyAfterAspect {
 
   // PointCut
-  @Pointcut("execution(* com.gdu.prj06.controller.*Controller.*(..))")
+  @Pointcut("execution(* com.gdu.prj07.controller.*Controller.*(..))")
   public void setPointCut() {}
   
  

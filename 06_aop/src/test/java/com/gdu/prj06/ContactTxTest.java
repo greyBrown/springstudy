@@ -27,8 +27,4 @@ public class ContactTxTest {
     contactService.txTest();
   }
 
- 
-  
-  
-  
 }
