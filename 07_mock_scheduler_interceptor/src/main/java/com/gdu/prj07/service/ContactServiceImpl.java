@@ -6,8 +6,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 import com.gdu.prj07.dao.ContactDao;
 import com.gdu.prj07.dto.ContactDto;
 

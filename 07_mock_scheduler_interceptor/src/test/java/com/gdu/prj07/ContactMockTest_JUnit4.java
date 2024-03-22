@@ -44,7 +44,7 @@ public class ContactMockTest_JUnit4 {
   // 테스트 수행을 위한 MockMvc 객체 선언
   private MockMvc mockMvc; // 위의 @Autowired와는 상관이 없다. 이건 지금은 그냥 null값임.
   
-  // MockMvc 객체 생성 (테스트 수행 이전에 생성한다)
+ // MockMvc 객체 생성 (테스트 수행 이전에 생성한다)
  // @Before
   public void setUp() {
     mockMvc = MockMvcBuilders
