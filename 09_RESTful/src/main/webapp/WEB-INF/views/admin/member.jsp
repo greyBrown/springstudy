@@ -86,10 +86,107 @@
                }).open();
             }
     </script>
+  </div>
+  <div>
+    <button id="btn-init">초기화</button>
+    <button id="btn-register">등록</button>
+    <button id="btn-modify">수정</button>
+    <button id="btn-remove">삭제</button>
+    
+  </div>
   
+  <hr>
   
+  <div>
+    
+    <table border="1">
+      <thead>
+        <tr>
+          <td>선택</td>
+          <td>이메일</td>
+          <td>이름</td>
+          <td>성별</td>
+          <td>버튼</td>
+        </tr>      
+      </thead>
+      <tbody id="members"></tbody>
+      <tfoot>
+        <tr>
+          <td colspan="5" id="paging"></td>
+        </tr>
+      </tfoot>
+    </table>
   </div>
   </div>
+  
+  <script>
+  
+  //jQuery 객체 선언
+  var email = $('#email');
+  var mName = $('#name');
+  var gender = $('input[type=radio][name=gender]'); // :radio[name:gender] 로 줄여서 표현가능
+  var zonecode = $('#zonecode');
+  var address = $('#address');
+  var detailAddress = $('#detailAddress');
+  var extraAddress = $('#extraAddress');
+  var btnInit = $('#btn-init');
+  var btnRegister = $('#btn-register');
+  var btnModify = $('#btn-modify');
+  var btnRemove = $('#btn-remove');
+  
+  // 함수 표현식 (함수 만들기)
+    const fnInit = ()=>{
+    	email.val('');
+    	mName.val('');
+    	$('#none').prop('checked', true);
+    //$('#none').attr('checked', 'checked'); 이렇게도 표현할 수 있음. property를 사용하냐 attribute를 사용하냐 무슨 형태를 사용하냐에 따라 나뉜다.
+    	zonecode.val('');
+      address.val('');
+      detailAddress.val('');
+      extraAddress.val('');
+    }
+  
+    
+    const fnRegisterMember = ()=>{
+    	$.ajax({
+    		// 요청
+    		type: 'POST',
+    		url: '${contextPath}/members',
+    		contentType:'application/json',  // 보내는 데이터의 타입. js -> server 는 문자열로 이동하고, json.stringify 메소드가 문자열로 변환해준다.
+    		data: JSON.stringify({           // 보내는 데이터(문자열 형식의 JSON 데이터). 이 data가 body인듯..post는 본문에 데이터를 저장하고, 여기가 본문
+    			'email': email.val(),
+    			'name': mName.val(),
+    			'gender': $(':radio:checked').val(), // 3개의 radio 중에 checked 된 것의 value
+    			'zonecode': zonecode.val(),
+    			'address': address.val(),
+    			'detailAddress': detailAddress.val(),
+    			'extraAddress': extraAddress.val()           // 앞에 '' 안에 있는건 변수가 아니라 property임!
+    			//JSON 데이터를 본문에 싣어서 controller로 넘긴다. 처음 해보는 방식임
+    		}), 
+    		// 응답
+    		dataType: 'json'  // 받는 데이터 타입
+    	}).done(resData=>{                      //resData={"insertCount":2} <- insertCount += 로 누적함. 2개의 insert가 모두 성공하면 성공
+    		 if(resData.insertCount === 2){
+    			 alert('정상적으로 등록되었습니다.');
+    			 fnInit();
+    			 }
+    	}).fail(jqXHR=>{
+          alert(jqXHR.responseText); //service에서 작성한 "이미 가입된 이메일입니다" 라는 메시지가 출력.
+    	})
+    }
+  
+  // 함수 호출 및 이벤트
+    fnInit();
+    btnInit.on('click', fnInit);
+    btnRegister.on('click', fnRegisterMember);
+  
+   
+ 
+  
+  </script>
+  
+  
+  
 
 </body>
 </html>

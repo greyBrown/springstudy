@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 
+import com.gdu.prj09.dto.AddressDto;
 import com.gdu.prj09.dto.MemberDto;
 
 import lombok.RequiredArgsConstructor;
@@ -16,11 +17,16 @@ public class MemberDaoImpl implements MemberDao {
   private final SqlSessionTemplate sqlSessionTemplate;
   // sqlSessionTemplate 를 이용한 mybatis는 9장이 아마 끝일수도 있어용. 다른 방법으로도 해볼 예정
   
-  public final static String NS = "com.gdu.prj09.mybatis.mapper.member_t";   
+  public final static String NS = "com.gdu.prj09.mybatis.mapper.member_t.";   
   
   @Override
   public int insertMember(MemberDto member) {
     return sqlSessionTemplate.insert(NS + "insertMember", member);
+  }
+  
+  @Override
+  public int insertAddress(AddressDto address) {
+    return sqlSessionTemplate.insert(NS + "insertAddress", address);
   }
 
   @Override

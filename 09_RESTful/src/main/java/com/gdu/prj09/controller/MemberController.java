@@ -1,7 +1,14 @@
 package com.gdu.prj09.controller;
 
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.gdu.prj09.service.MemberService;
 
@@ -45,6 +52,18 @@ public class MemberController {
      // /admin/member.do   =====> /WEB-INF/views/admin/member.jsp
      
    }
+   
+   @PostMapping(value="/members", produces="application/json")
+   public ResponseEntity<Map<String, Object>> registerMember(@RequestBody Map<String, Object> map,
+                                                              HttpServletResponse response){
+     // DTO가 쪼개져있어서 JSON데이터를 찢어서 받는게 안되기 때문에....(1. 새로운 DTO를 만든다. 2. MAP으로 받는다) 이렇게 선택지가 나뉠 수 있음
+     // 먼저 MAP으로 받는 방법을 연습하고, 최종적으로 새롭게 만들어지는 DTO를 통해 데이터를 받는다.
+     
+     
+     return memberService.registerMember(map, response);
+     
+   }
+   
    
    
    

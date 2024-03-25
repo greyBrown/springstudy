@@ -12,7 +12,7 @@
   
   <!-- typeAliases -->
   <typeAliases>
-    <typeAlias alias="MemberDto" type="com.gdu.prj09.dto.MemberDto"/>
+    <typeAlias alias="MemberDto"  type="com.gdu.prj09.dto.MemberDto"/>
     <typeAlias alias="AddressDto" type="com.gdu.prj09.dto.AddressDto"/>
   </typeAliases>
   

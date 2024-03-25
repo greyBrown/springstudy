@@ -5,25 +5,56 @@
 
 <mapper namespace="com.gdu.prj09.mybatis.mapper.member_t">
 
+
+
+
   <insert id="insertMember"
           parameterType="MemberDto">
-   INSERT INTO MEMBER_T(
-      MEMBER_NO
-    , EMAIL
-    , NAME
-    , GENDER 
-   ) VALUES (
-      MEMBER_SEQ.NEXTVAL
-     , #{email}
-     , #{name}
-     , #{gender}
-   )       
+    <selectKey keyProperty="memberNo" order="BEFORE" resultType="int">
+    <!-- insert 전에(Before) 시퀀스 값을 빼서 memberDto 의 memberNo에 저장이 된다. -->
+    SELECT MEMBER_SEQ.NEXTVAL
+     FROM DUAL
+      
+    </selectKey>
+    INSERT INTO MEMBER_T (
+        MEMBER_NO
+      , EMAIL
+      , NAME
+      , GENDER
+    ) VALUES (
+        #{memberNo}
+      , #{email}
+      , #{name}
+      , #{gender}
+    )
   </insert>
-
-
-
-
-
-
+  
+  <insert id="insertAddress"
+          parameterType="AddressDto">
+   INSERT INTO ADDRESS_T (
+          ADDRESS_NO
+        , ZONECODE
+        , ADDRESS
+        , DETAIL_ADDRESS
+        , EXTRA_ADDRESS
+        , MEMBER_NO
+   ) VALUES (
+        ADDRESS_SEQ.NEXTVAL
+      , #{zonecode}  
+      , #{address}  
+      , #{detailAddress}  
+      , #{extraAddress}  
+      , #{member.memberNo}  
+   )
+           
+  
+  
+  
+  
+  </insert>
+  
+  
+  
+  
   
 </mapper>

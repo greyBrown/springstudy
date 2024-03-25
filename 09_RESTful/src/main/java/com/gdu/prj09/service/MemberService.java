@@ -24,7 +24,7 @@ public interface MemberService {
   ResponseEntity<MemberDto> getMemberByNo(int memberNo);
   //주소 모양은 members/1  <- member 1번
   
-  ResponseEntity<Map<String, Object>> registerMember(MemberDto member, HttpServletResponse response);
+  ResponseEntity<Map<String, Object>> registerMember(Map<String, Object> map, HttpServletResponse response);
   //1(성공) 혹은 0(실패) 이 온다고 하더라도 jackson 라이브러리가 json으로 바꿔주도록 하기 위해 map을 사용.
   // DB의 unique 처리에 대해 생각해봐야 함. DAO에서 중복체크를 해주는 메소드가 하나 있다던가...이런식으로 중복체크를 할 수 있음.
   // 하지만 오늘은 중복체크 안할 거예요!! 그냥 넣을거에요. 
