@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class FileDto {
   private int fileNo;
   private String uploadPath;
-  private String originalFileName;
+  private String originalFileName; 
   private String filesystemName;
   private int historyNo;
 

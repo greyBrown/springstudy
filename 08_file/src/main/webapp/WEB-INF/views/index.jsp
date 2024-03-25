@@ -93,56 +93,55 @@
       }
     }
   
-    const fnAsyncUpload = ()=>{  // 비동기처리방식
-	  const inputFiles = document.getElementById('input-files');
-    const inputWriter = document.getElementById('input-writer');
-    let formData = new FormData();
-    for(let i = 0; i < inputFiles.files.length; i++){
-    	formData.append('files', inputFiles.files[i]);                   // 첨부된 개별 파일 자체
-    }
-    formData.append('writer', inputWriter);
-    fetch('${contextPath}/upload2.do', {
-    	method: 'POST',
-    	body: formData
-    })
-      .then(response=>response.json())
-      .then(resData=>{   /*resData = {"success": 1} 또는 {"success": 0} */
-    	  if(resData.success === 1) {
-    		  alert('저장되었습니다.');
-    	  } else {
-    		  alert('저장실패했습니다.');
-    	  }
-      })
-  }
-    
-    // upload1과 좀 다른 방법으로 처리한다면? 방식 $.ajax 사용
-    const fnAsyncUpload2 = ()=>{
-        const inputFiles = document.getElementById('input-files');
-        const inputWriter = document.getElementById('input-writer');
-        let formData = new FormData();
-        for(let i = 0; i < inputFiles.files.length; i++){
-          formData.append('files', inputFiles.files[i]);
-        }
-        formData.append('writer', inputWriter);
-        $.ajax({
-          type: 'POST',
-          url: '${contextPath}/upload2.do',
-          contentType: false,
-          processData: false,
-          data: formData,
-          dataType: 'json'
-        }).done(resData=>{
+  const fnAsyncUpload = ()=>{  // 비동기처리방식
+      const inputFiles = document.getElementById('input-files');
+      const inputWriter = document.getElementById('input-writer');
+      let formData = new FormData();
+      for(let i = 0; i < inputFiles.files.length; i++){
+        formData.append('files', inputFiles.files[i]);          //첨부된 '개별'파일 자체
+      }
+      formData.append('writer', inputWriter);
+      fetch('${contextPath}/upload2.do', {
+        method: 'POST',
+        body: formData
+      }).then(response=>response.json())
+        .then(resData=>{  /* resData = {"success": 1} 또는 {"success": 0} */
           if(resData.success === 1){
             alert('저장되었습니다.');
           } else {
             alert('저장실패했습니다.');
           }
         })
+    }
+    
+    // upload1과 좀 다른 방법으로 처리한다면? 방식 $.ajax 사용
+    const fnAsyncUpload2 = ()=>{
+      const inputFiles = document.getElementById('input-files');
+      const inputWriter = document.getElementById('input-writer');
+      let formData = new FormData();
+      for(let i = 0; i < inputFiles.files.length; i++){
+        formData.append('files', inputFiles.files[i]);
       }
+      formData.append('writer', inputWriter);
+      $.ajax({
+        type: 'POST',
+        url: '${contextPath}/upload2.do',
+        contentType: false,  // content-type header를 생성하지 않도록 설정
+        data: formData,      // FormData 객체를 서버로 전달
+        processData: false,  // 전달되는 데이터가 객체인 경우 객체를 {property: value} 형식의 문자열로 자동으로 변환해서 전달하는데 이를 방지하는 옵션
+        dataType: 'json'
+      }).done(resData=>{
+        if(resData.success === 1){
+          alert('저장되었습니다.');
+        } else {
+          alert('저장실패했습니다.');
+        }
+      })
+    }
   
-  fnFileCheck();
-  fnAfterInsertCheck();
-  document.getElementById('btn-upload').addEventListener('click', fnAsyncUpload);
+    fnFileCheck();
+    fnAfterInsertCheck();
+    document.getElementById('btn-upload').addEventListener('click', fnAsyncUpload2);
   
   
   

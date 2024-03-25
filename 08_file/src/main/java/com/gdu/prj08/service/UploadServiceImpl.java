@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 
 
 @RequiredArgsConstructor
+@Service
 public class UploadServiceImpl implements UploadService {
 
   private final MyFileUtils myFileUtils;

@@ -1,7 +1,6 @@
 package com.gdu.prj08.dao;
 
 import org.mybatis.spring.SqlSessionTemplate;
-import org.springframework.stereotype.Repository;
 
 import com.gdu.prj08.dto.FileDto;
 import com.gdu.prj08.dto.HistoryDto;

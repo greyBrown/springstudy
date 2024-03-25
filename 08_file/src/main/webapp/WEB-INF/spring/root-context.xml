@@ -1,35 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns:p="http://www.springframework.org/schema/p"
-  xmlns:tx="http://www.springframework.org/schema/tx"
-  xmlns:aop="http://www.springframework.org/schema/aop"
-  xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
-	
-	<!-- Root Context: defines shared resources visible to all other web components -->
-
-
-  <!-- 파일 업로드를 위한 CommonsMultipartResolver bean 등록 (10MB=10485760) -->
+  xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+  
+  <!-- Root Context: defines shared resources visible to all other web components -->
+  
+  <!-- 파일 업로드를 위한 CommonsMultipartResolver bean 등록 -->
   <!-- bean 이름은 반드시 multipartResolver 여야 한다. -->
-  <bean id="multipartResolver" 
-     class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
-     scope="singleton">
+  <bean id="multipartResolver"
+        class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+        scope="singleton">
     <property name="defaultEncoding" value="UTF-8"/>
-    <property name="maxInMemorySize" value="10485760"></property>
-    <property name="maxUploadSize" value="104857600"></property>
-  </bean>		
-    
-     <!-- Root Context: defines shared resources visible to all other web components -->
-    
+    <property name="maxUploadSizePerFile" value="10485760"/>
+    <property name="maxUploadSize" value="104857600"/>
+  </bean>
+  
   <bean class="com.zaxxer.hikari.HikariConfig"
         id="hikariConfig"
-        scope="singleton"
-        p:driverClassName="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"
-        p:jdbcUrl="jdbc:log4jdbc:oracle:thin:@localhost:1521:xe"
-        p:username="GD"
-        p:password="1111"/>
+        scope="singleton">
+    <property name="driverClassName" value="net.sf.log4jdbc.sql.jdbcapi.DriverSpy"/>
+    <property name="jdbcUrl" value="jdbc:log4jdbc:oracle:thin:@localhost:1521:xe"/>
+    <property name="username" value="GD"/>
+    <property name="password" value="1111"/>
+  </bean>
   
   <bean class="com.zaxxer.hikari.HikariDataSource"
         id="hikariDataSource"
@@ -55,23 +48,6 @@
         id="fileDao"
         scope="singleton">
     <constructor-arg ref="sqlSessionTemplate"/>
-  </bean>
+  </bean>  
   
-  <bean class="com.gdu.prj08.service.UploadServiceImpl"
-        id="uploadService"
-        scope="singleton">
-    <constructor-arg ref="fileDao" />
-  </bean>
-
-    <bean class="com.gdu.prj08.controller.UploadController"
-            id="uploadController"
-            scope="singleton">
-        <constructor-arg ref="uploadService" />
-      </bean>
-
-
-
-
-
-
 </beans>
