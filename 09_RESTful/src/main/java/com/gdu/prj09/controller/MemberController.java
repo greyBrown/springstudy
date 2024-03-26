@@ -1,12 +1,14 @@
 package com.gdu.prj09.controller;
 
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -59,18 +61,53 @@ public class MemberController {
      // DTO가 쪼개져있어서 JSON데이터를 찢어서 받는게 안되기 때문에....(1. 새로운 DTO를 만든다. 2. MAP으로 받는다) 이렇게 선택지가 나뉠 수 있음
      // 먼저 MAP으로 받는 방법을 연습하고, 최종적으로 새롭게 만들어지는 DTO를 통해 데이터를 받는다.
      
-     
      return memberService.registerMember(map, response);
+   }
+   
+   // @PathVariable을 이용한 mapping 값 value에 {}를 넣는 새로운 문법 사용. 
+   // (@PathVariable(value= "page") int page) - > 경로변수로 int page에 "page"를 저장하라. requried 옵션이 있다. (디폴트가 true고 보통 true로 쓴다)
+   // 하지만 전달이 안될 경우 null로 인식되기 때문에, 그 대비를 해주는게 베스트. null 값을 대비하는 optional을 사용 
+   @GetMapping(value="/members/page/{p}/display/{dp}", produces="application/json")
+   public ResponseEntity<Map<String, Object>> getMembers(@PathVariable(value= "p", required=false) Optional<String> optPage
+                                                                                            , @PathVariable(value="dp", required=false)Optional<String> optDisplay){
+     int page = Integer.parseInt(optPage.orElse("1"));
+     int display = Integer.parseInt(optDisplay.orElse("20"));
+     return memberService.getMembers(page, display);
+   }
+   
+   @GetMapping(value="/members/{memberNo}", produces="application/json")
+   public ResponseEntity<Map<String, Object>> getMemberByNo(@PathVariable(value="memberNo", required=false) Optional<String> opt){
+     int memberNo = Integer.parseInt(opt.orElse("0"));
      
+     return memberService.getMemberByNo(memberNo);
    }
    
    
    
    
+   
+   
   
+  /*
+   * MyPageUtils(getAsyncPaging) 에서 아래와 같이
+   * <a href="javascript:fnPaging(10)"> < </a>
+   * <a href="javascript:fnPaging(10)"> 11 </a>
+   * <a href="javascript:fnPaging(10)"> 12 </a>
+   * <a href="javascript:fnPaging(10)"> 13 </a>
+   * <a href="javascript:fnPaging(10)"> > </a>
+   * back 에서 이런식으로 페이지를 만들어냄
+   * 
+   * front 에서는 const fnPaging = (p)=>{
+   *                 page=[;
+   *                 fnMemberList();
+   *                  }                       이런식으로....
+   */
   
-  
-  
+   /* 1:M 관계의 상세보기는 detail 과 list의 조합이다. 댓글형 게시판과 같은 구조임!!
+    * 1 상세보기 하나 띄어주고 그 1이 가진 M의 목록들을 쫙 띄어주는 구조
+    * detail과 list
+    * 
+    */
   
   
   

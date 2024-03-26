@@ -15,7 +15,9 @@ public class AddressDto {
   private String address;
   private String detailAddress;
   private String extraAddress;
-  private MemberDto member;         
+  private MemberDto member;
+  // 쿼리문에서 select 해온 결과가 MemberDto member 안에 들어갈 수 있다는 것을 mapper에서 명시(작성)해줘야 한다.
+  // 바로 저장이 안되서 하는 작업...되면 좋겠지만 안된다! 명시해줘야 한다.
   
   /*AddressDto
    * zone

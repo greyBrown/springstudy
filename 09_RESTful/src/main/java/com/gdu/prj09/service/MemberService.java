@@ -21,7 +21,7 @@ public interface MemberService {
    *                                                          getMemberList(Map map)
    */
   
-  ResponseEntity<MemberDto> getMemberByNo(int memberNo);
+  ResponseEntity<Map<String, Object>> getMemberByNo(int memberNo);
   //주소 모양은 members/1  <- member 1번
   
   ResponseEntity<Map<String, Object>> registerMember(Map<String, Object> map, HttpServletResponse response);
