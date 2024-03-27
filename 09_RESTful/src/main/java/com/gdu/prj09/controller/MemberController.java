@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.gdu.prj09.service.MemberService;
@@ -39,7 +40,6 @@ import lombok.RequiredArgsConstructor;
  *  // 주소는 같지만 Method 에서 구분이 된다.
  *  
  */            
-
 
 
 @RequiredArgsConstructor
@@ -78,11 +78,13 @@ public class MemberController {
    @GetMapping(value="/members/{memberNo}", produces="application/json")
    public ResponseEntity<Map<String, Object>> getMemberByNo(@PathVariable(value="memberNo", required=false) Optional<String> opt){
      int memberNo = Integer.parseInt(opt.orElse("0"));
-     
      return memberService.getMemberByNo(memberNo);
    }
    
-   
+   @PutMapping(value="/members", produces="application/json") //json 데이터가 body(본문)에 포함되어 있다. 이걸 @RequestBody를 통해 받을 수 있음
+   public ResponseEntity<Map<String, Object>> modifyMember(@RequestBody Map<String, Object> map) {
+     return memberService.modifyMember(map);
+   }
    
    
    

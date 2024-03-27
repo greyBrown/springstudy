@@ -60,6 +60,31 @@
     )
   </insert>
   
+  <update id="updateMember"
+          parameterType="Map">
+   UPDATE MEMBER_T
+      SET NAME = #{name}
+        , GENDER = #{gender}
+    WHERE MEMBER_NO = #{memberNo}    
+  </update>
+  
+  <update id="updateAddress"
+          parameterType="Map">
+   UPDATE ADDRESS_T
+      SET ZONECODE = #{zonecode}
+        , ADDRESS = #{address}
+        , DETAIL_ADDRESS = #{detailAddress}
+        , EXTRA_ADDRESS = #{extraAddress}
+    WHERE MEMBER_NO = #{memberNo} 
+  <!-- 지금은 멤버 하나당 주소가 1개지만, 나중에 멤바당 주소가 여러개가 된다면 조건절을 다르게 줘야 함.
+   1:M 관계의 구성이라면 WHERE ADDRESS_NO = #{addressNo} 이렇게 줘야지 모든 주소가 다 바뀌지 않음. 화면은 대표주소가 따로있고 
+   다른 자잘한 주소들은 따로 있는 그런 모양새. 1:M 에서 update 바꿀 주소 where 주소=기존주소 인거 찾아서 바꿔야지 
+   멤버=멤버면 다른 주소 1 2 3 다 바뀐다는 이야기~   -->
+              
+  </update>
+  
+  
+  
   <select id="getTotalMemberCount"
           resultType="int">
     SELECT COUNT(*)

@@ -145,6 +145,77 @@ btnInit.on('click', fnInit);
 btnRegister.on('click', fnRegisterMember);
 fnMemberList();
 jqDisplay.on('change', fnChangeDisplay);
+
+//jQuery 객체 선언
+var btnDetail = $('.btn-detail');
+
+ // 함수 표현식 (함수 만들기)
+ const getMemberByNo = (evt)=>{
+   $.ajax({
+     type: 'GET',
+     url: getContextPath() + '/members/' + evt.target.dataset.memberNo,
+     dataType: 'json'
+   }).done(resData=>{  /* resData =  {
+                               "addressList": [
+                                 {
+                                   "addressNo":1,
+                                   "zonecode": "12345",
+                                   "address":"서울시 구로구 디지털로",
+                                   "detailAddress": "카카오", 
+                                   "extraAddress":"(가산동)"
+                                 },
+                                ...  
+                               ],
+                               "member": {
+                                 "memberNo":1,
+                                 "email": "email@email.com",
+                                 "name":"gildong",
+                                 "gender": "man"
+                                  }
+                                }
+                         */
+     email.val(resData.member.email);
+     mName.val(resData.member.name);                                           //radio는 input 처럼 val()로 세팅해줄 수 가 없어 다르게 접근해야 함.
+     $(':radio[value=' + resData.member.gender + ']').prop('checked', true);  // radio 중에 value가 man 이나 woman인 걸 구하고 전달된 데이터 중 해당하는 것을 체크해라.
+     zonecode.val(resData.addressList[0].zonecode);
+     address.val(resData.addressList[0].address);
+     detailAddress.val(resData.addressList[0].detailAddress);
+     extraAddress.val(resData.addressList[0].extraAddress);
+   }).fail(jqXHR=>{
+     alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+   })
+ }
+ 
+ 
+
+
+ // 함수 호출 및 이벤트
+ $(document).on('click', btnDetail, (evt)=>{ getMemberByNo(evt); })
+ 
+ 
+ 
+ 
+ /* const getMemberByNo = (evt)=>{ 
+    $.ajax({
+      type: 'GET',
+      url: getContextPath() + '/members/' + evt.target.dataset.memberNo,
+      dataType: 'json'
+    }).done(resData=>{  
+      email.val(resData.member.email);
+      mName.val(resData.member.name);                                           //radio는 input 처럼 val()로 세팅해줄 수 가 없어 다르게 접근해야 함.
+      $(':radio[value=' + resData.member.gender + ']').prop('checked', true);  // radio 중에 value가 man 이나 woman인 걸 구하고 전달된 데이터 중 해당하는 것을 체크해라.
+      zonecode.val(resData.addressList[0].zonecode);
+      address.val(resData.addressList[0].address);
+      detailAddress.val(resData.addressList[0].detailAddress);
+      extraAddress.val(resData.addressList[0].extraAddress);
+    }).fail(jqXHR=>{
+      alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+    })
+  }
+  이 부분이 조회할때 비어있는 정보가 있어서 계속 error가 떴던(서버는 계속 멀쩡히 작동되지만 조회 누를때마다 뜬 그거) 코드
+  강사님이 수정하신후 해당 오류는 더 이상 뜨지 않음. 어떻게 안뜨게 만드신건지 먼저거(이거) 고치신거(js) 보면서 봐보기
+ */ 
+
   
 </script>
 </body>

@@ -123,9 +123,33 @@ public class MemberServiceImpl implements MemberService {
     }
 
   @Override
-  public ResponseEntity<Map<String, Object>> modifyMember(MemberDto member) {
-    // TODO Auto-generated method stub
-    return null;
+  public ResponseEntity<Map<String, Object>> modifyMember(Map<String, Object> map) {
+
+    int updateMemberCount = memberDao.updateMember(map);
+    int updateAddressCount = memberDao.updateAddress(map);
+    
+  
+    
+    if(updateAddressCount == 0 ) {
+      
+      
+      // address 테이블이 비어있어 수정이 안되는걸 update -> insert 로 바꿔서 진행한 부분. updateCount =0 이면 update -> insert로 바꾸자
+          AddressDto address = AddressDto.builder()
+              .zonecode((String)map.get("zonecode"))
+              .address((String)map.get("address"))
+              .detailAddress((String)map.get("detailAddress"))
+              .extraAddress((String)map.get("extraAddress"))
+              .member(MemberDto.builder()
+                             .memberNo(Integer.parseInt((String)map.get("memberNo")))
+                           .build())
+           .build();
+          
+         
+          updateAddressCount = memberDao.insertAddress(address);                 
+    }
+      
+    return new ResponseEntity<Map<String,Object>>(Map.of("updateCount", updateMemberCount + updateAddressCount), HttpStatus.OK); 
+    // 이 map이 화면으로 넘어갈때 jackson이 map을 json 으로 바꿔준다. 성공시 저 json이 member.jsp로 전달되기를 기대
   }
 
   @Override

@@ -30,7 +30,7 @@ public interface MemberService {
   // 하지만 오늘은 중복체크 안할 거예요!! 그냥 넣을거에요. 
   //오늘의 구현방향은 그냥 우겨넣고 1. 정상 처리 2. Excep 발생 -> 예외처리(try-catch)로 응답(response) 만들어줌. 이렇게 처리해 볼 것임.
   
-  ResponseEntity<Map<String, Object>> modifyMember(MemberDto member);
+  ResponseEntity<Map<String, Object>> modifyMember(Map<String, Object> map);
   // 이메일은 변경 못하게 할거라서 response는 필요 없음. 이메일이 회원아이디
   
   ResponseEntity<Map<String, Object>> removeMember(int memberNo);
