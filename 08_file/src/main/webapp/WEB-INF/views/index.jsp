@@ -114,7 +114,7 @@
         })
     }
     
-    // upload1과 좀 다른 방법으로 처리한다면? 방식 $.ajax 사용
+    // upload1과 좀 다른 방법으로 처리한다면? 방식 $.ajax 사용 (fetch 와 똑같음. 방식의 차이)
     const fnAsyncUpload2 = ()=>{
       const inputFiles = document.getElementById('input-files');
       const inputWriter = document.getElementById('input-writer');

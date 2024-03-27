@@ -113,11 +113,9 @@ public class MemberServiceImpl implements MemberService {
         out.flush();
         out.close();
         
-        
       } catch (Exception e2) {
         e.printStackTrace();
       }
-      
     }
     
     return result;
