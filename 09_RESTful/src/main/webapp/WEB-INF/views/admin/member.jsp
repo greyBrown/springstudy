@@ -93,7 +93,12 @@
     
     <div>
       <div id="total"></div>
-      <div><select id="display"><option>20</option><option>50</option><option>100</option></select></div>
+      <div>
+      <select id="display">
+      <option>20</option>
+      <option>50</option>
+      <option>100</option></select>
+      </div>
       <table border="1">
         <thead>
           <tr>
@@ -123,40 +128,8 @@
 // jQuery 객체 선언
 
 // 함수 표현식 (함수 만들기)
-const fnModifyMember = ()=>{
-	$.ajax({
-		type: 'PUT',
-		url: fnGetContextPath() + '/members', 
-		contentType: 'application/json',
-		data: JSON.stringify({ 
-			// 맵퍼에서 작성한 변수명 들이 여기서 만드는 객체의 프로퍼티 이름. 샵 중괄호 그거...아 주석을 뚫고 에러를 만드네...? 
-			'memberNo': jqMemberNo.val(),
-			'name': jqName.val(),
-			'gender': $(':radio:checked').val(),
-			'zonecode': jqZonecode.val(),
-			'address': jqAddress.val(),
-			'detailAddress': jqDetailAddress.val(),
-			'extraAddress': jqExtraAddress.val()
-		}),
-		dataType: 'json', // 받아오는 데이터의 타입
-		success: (resData)=>{ // resData = {"updateCount" : 2} <- 성공일 시 기대하는 값
-			if(resData.updateCount === 2) {
-				alert('회원 정보가 수정되었습니다.');
-				fnGetMemberList();
-			} else {
-				alert('회원 정보가 수정되지 않았습니다.'); // 이름 수정은 멀쩡히 되는데 ADDRESS_T에 더미만 넣어놔서.... alert창에 안된다고 뜸 ㅎ
-			}
-		},
-		error: (jqXHR)=>{
-			alert(jqXHR.statusText + '(' + jqXHR.status + ')');
-		}
-	})
-}
-
-
 
 // 함수 호출 및 이벤트
-jqBtnModify.on('click', fnModifyMember);
 
   </script>
 

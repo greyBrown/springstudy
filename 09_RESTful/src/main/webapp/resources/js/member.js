@@ -192,6 +192,96 @@ const fnGetMemberByNo = (evt)=>{
     alert(jqXHR.statusText + '(' + jqXHR.status + ')');
   })
 }
+const fnModifyMember = ()=>{
+  $.ajax({
+    type: 'PUT',
+    url: fnGetContextPath() + '/members', 
+    contentType: 'application/json',
+    data: JSON.stringify({ 
+      // 맵퍼에서 작성한 변수명 들이 여기서 만드는 객체의 프로퍼티 이름. 샵 중괄호 그거...아 주석을 뚫고 에러를 만드네...? 
+      'memberNo': jqMemberNo.val(),
+      'name': jqName.val(),
+      'gender': $(':radio:checked').val(),
+      'zonecode': jqZonecode.val(),
+      'address': jqAddress.val(),
+      'detailAddress': jqDetailAddress.val(),
+      'extraAddress': jqExtraAddress.val()
+    }),
+    dataType: 'json', // 받아오는 데이터의 타입
+    success: (resData)=>{ // resData = {"updateCount" : 2} <- 성공일 시 기대하는 값
+      if(resData.updateCount === 2) {
+        alert('회원 정보가 수정되었습니다.');
+        fnGetMemberList();
+      } else {
+        alert('회원 정보가 수정되지 않았습니다.'); // 이름 수정은 멀쩡히 되는데 ADDRESS_T에 더미만 넣어놔서.... alert창에 안된다고 뜸 ㅎ
+      }
+    },
+    error: (jqXHR)=>{
+      alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+    }
+  })
+}
+
+const fnRemoveMembers = ()=>{
+  // 체크된 요소를 배열에 저장하기
+  let arr = [];
+  $.each($('.chk-member'), (i, chk)=>{  // 하나씩 빼오는 chk 는 제이쿼리 객체가 아니므로 다시 래퍼로 감싸준다.
+    if($(chk).is(':checked')){
+      arr.push(chk.value);             // arr 에 저장하는 메소드 push. chk의 value를 배열에 저장하겠다.
+    }
+  })
+  // 체크된 요소가 없으면 함수 종료
+  if(arr.length === 0){
+    alert('선택된 회원 정보가 없습니다.');
+    return;
+  }
+  // 삭제 확인
+  if(!confirm('선택된 회원 정보를 모두 삭제할까요?')){
+    return;
+  }
+  // 삭제
+  $.ajax({
+    type: 'DELETE',
+    url: fnGetContextPath() + '/members/' + arr.join(','),    // 배열에서 쭈르륵 꺼내주는 메소드 join
+    dataType: 'json',
+    success: (resData)=>{   // {"deleteCount": 3}
+      if(resData.deleteCount === arr.length){
+        alert('선택된 회원 정보가 삭제되었습니다.');
+        vPage = 1;
+        fnGetMemberList();
+      } else{
+        alert('선택된 회원 정보가 삭제되지 않았습니다.');
+      }
+    },
+    error: (jqXHR)=>{
+        alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+     }
+    })
+  }
+  
+  const fnRemoveMember = ()=>{
+  if(!confirm('삭제할까요?')){
+    return;
+  }
+  $.ajax({
+    type:'DELETE',
+    url: fnGetContextPath() + '/member/' + jqMemberNo.val(),
+    dataType: 'json'
+  }).done(resData=>{ // {"deleteCount": 1}
+    if(resData.deleteCount === 1){
+      alert('회원 정보가 삭제되었습니다.');
+      fnInit();
+      vPage = 1;                                    // 마지막페이지에서 회원이 삭제되었을때 목록에 아무런 페이지가 안뜨는 사태를 방지
+      fnGetMemberList();
+    }else{
+      alert('회원 정보가 삭제되지 않았습니다');
+    }
+  }).fail(jqXHR=>{
+      alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+  })
+}
+  
+
 
 // 함수 호출 및 이벤트
 fnInit();
@@ -200,3 +290,6 @@ jqBtnRegister.on('click', fnRegisterMember);
 fnGetMemberList();
 jqDisplay.on('change', fnChangeDisplay);
 $(document).on('click', '.btn-detail', (evt)=>{ fnGetMemberByNo(evt); });
+jqBtnModify.on('click', fnModifyMember);
+jqBtnRemove.on('click', fnRemoveMember);
+jqBtnSelectRemove.on('click', fnRemoveMembers);

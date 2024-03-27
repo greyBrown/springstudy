@@ -215,6 +215,44 @@ var btnDetail = $('.btn-detail');
   이 부분이 조회할때 비어있는 정보가 있어서 계속 error가 떴던(서버는 계속 멀쩡히 작동되지만 조회 누를때마다 뜬 그거) 코드
   강사님이 수정하신후 해당 오류는 더 이상 뜨지 않음. 어떻게 안뜨게 만드신건지 먼저거(이거) 고치신거(js) 보면서 봐보기
  */ 
+ 
+ 
+ const fnRemoveMembers = ()=>{
+	  // 체크된 요소를 배열에 저장하기
+	  let arr = [];
+	  $.each($('.chk-member'), (i, chk)=>{
+	    if($(chk).is(':checked')){
+	      arr.push(chk.value);
+	    }
+	  })
+	  // 체크된 요소가 없으면 함수 종료
+	  if(arr.length === 0){
+	    alert('선택된 회원 정보가 없습니다.');
+	    return;
+	  }
+	  // 삭제 확인
+	  if(!confirm('선택된 회원 정보를 모두 삭제할까요?')){
+	    return;
+	  }
+	  // 삭제
+	  $.ajax({
+	    type: 'DELETE',
+	    url: fnGetContextPath() + '/members/' + arr.join(','),
+	    dataType: 'json',
+	    success: (resData)=>{  // {"deleteCount": 3}
+	      if(resData.deleteCount === arr.length){
+	        alert('선택된 회원 정보가 삭제되었습니다.');
+	        vPage = 1;
+	        fnGetMemberList();
+	      } else {
+	        alert('선택된 회원 정보가 삭제되지 않았습니다.');
+	      }
+	    },
+	    error: (jqXHR)=>{
+	      alert(jqXHR.statusText + '(' + jqXHR.status + ')');
+	    }
+	  })
+	}
 
   
 </script>

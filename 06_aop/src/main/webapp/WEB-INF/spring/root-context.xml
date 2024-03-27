@@ -45,6 +45,13 @@
     <constructor-arg ref="sqlSessionTemplate"/>
   </bean>
   
+    <bean class="com.gdu.prj06.service.ContactServiceImpl"
+             id="contactService"
+             scope="singleton">
+             <constructor-arg ref="contactDao"/>
+    </bean>
+    
+    
     <!-- 트랜잭션 관리자 등록 -->
   <bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
            id="dataSourceTransactionManager"
@@ -72,11 +79,6 @@
       <!-- appConfig에서 집어넣어준것! 거기서 넣어줬기에 여기선 안해도 되지만 남겨놓음 -->
       <aop:aspectj-autoproxy/>
   
-    <bean class="com.gdu.prj06.service.ContactServiceImpl"
-             id="contactService"
-             scope="singleton">
-             <constructor-arg ref="contactDao"/>
-    </bean>
   
   
   

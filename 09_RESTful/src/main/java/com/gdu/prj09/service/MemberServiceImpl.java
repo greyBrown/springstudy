@@ -2,11 +2,13 @@ package com.gdu.prj09.service;
 
 import java.io.PrintWriter;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -133,8 +135,11 @@ public class MemberServiceImpl implements MemberService {
     if(updateAddressCount == 0 ) {
       
       
-      // address 테이블이 비어있어 수정이 안되는걸 update -> insert 로 바꿔서 진행한 부분. updateCount =0 이면 update -> insert로 바꾸자
-          AddressDto address = AddressDto.builder()
+      
+      // address 테이블에 있는게 없어서 ㅋㅋㅋ (insert 된게 없으니까) 수정이 안되는걸 update -> insert 로 바꿔서 진행한 부분. 
+      //updateCount = 0 이면 update -> insert로 바꾸자
+      // 그래서 insert를 update 인듯이 슬쩍 중간에 넣어준 과정임
+      AddressDto address = AddressDto.builder()
               .zonecode((String)map.get("zonecode"))
               .address((String)map.get("address"))
               .detailAddress((String)map.get("detailAddress"))
@@ -154,14 +159,13 @@ public class MemberServiceImpl implements MemberService {
 
   @Override
   public ResponseEntity<Map<String, Object>> removeMember(int memberNo) {
-    // TODO Auto-generated method stub
-    return null;
+    return new ResponseEntity<Map<String,Object>>(Map.of("deleteCount", memberDao.deleteMember(memberNo)), HttpStatus.OK);
   }
 
   @Override
   public ResponseEntity<Map<String, Object>> removeMembers(String memberNoList) {
-    // TODO Auto-generated method stub
-    return null;
+     // split을 사용해 넘어온 1,2,3,4... 이 String을 , 기준으로 배열로 만들어줌
+    return new ResponseEntity<Map<String,Object>>(Map.of("deleteCount", memberDao.deleteMembers(Arrays.asList(memberNoList.split(",")))), HttpStatus.OK);
   }
 
 }
