@@ -5,6 +5,7 @@
 	<groupId>com.gdu</groupId>
 	<artifactId>prj10</artifactId>
 	<name>10_editor</name>
+  <!-- 지금은 artifactId가 프로젝트명, 파일명이고(contextPath) 이 packaging은 확장자이다. war(웹아카이브파일) prj10.war 인셈  -->
 	<packaging>war</packaging>
 	<version>1.0.0-BUILD-SNAPSHOT</version>
  <properties>
@@ -191,8 +192,47 @@
     </dependency>
     -->
     
-    
   </dependencies>
+    
+    
+  <!-- 
+  
+    1. 빌드와 배포
+      1) 빌드 : 프로젝트를 배포하기 위해서 프로젝트를 하나의 파일(war, jar)로 만드는 과정. Maven Compiler 가 필요하다.
+                                                                                          (아래쪽 두번째 플러그인. 버전 3.8.1)
+      2) 배포 : 빌드 결과를(war, jar)를 WAS에 배포하는 것.
+      
+    2. 빌드 (STS 를 이용한 빌드)
+      1) Run As - Maven Build (5번 사용. ...)
+      2) 빌드 결과 파일명
+        (1) 기본값 : artifactId-version.packaging  
+        (2) 사용자 지정 : <finalName>
+      3) 빌드 결과 파일 위치
+        프로젝트\target
+        
+     (지금은 이클립스(sts)에서 제공하는 빌드를 하고, 이따는 외부로 넘어가 jenkins(깃헙에 올리면 jenkins가 긁어서 파일로 만들어줌) 라는 별도의 도구를 이용해서 배포)   
+     (지금은 완전수동으로 이클립스에서 제공하듣 빌드 -> 복붙복붙으로 톰캣에 넣고 안되면 껐다 다시하고 등등의 수동배포를 해볼것임)
+     
+    3. 배포 (WAS 에 직접 배포)
+      1) WAS 가 STOP 상태인지 확인하고 만약 START 상태라면 STOP 상태로 바꾼다.
+      2) CATALINA_HOME\webapps 디렉터리에 빌드 결과 파일을 가져간다.
+      3) WAS 를 START 한다.
+        (1) Windows 서버 : CATALINA_HOME\bin\startup.bat
+        (2) Linux   서버 : CATALINA_HOME\bin\startup.sh
+      4) 빌드 결과 파일 이름과 동일한 디렉터리가 생성되는지 확인한다. (자동으로 파일이 압축이 풀려서 폴더가 생성된다. 이때 압축 풀린 디렉터리명이 contextPath)
+      5) 웹 브라우저를 열고 배포 결과를 확인한다.
+        http://localhost:8080/빌드결과파일명
+        (즉, contextPath를 의미하는 디렉터리이름)
+       + 프로젝트 작업이 끝난 후에는 임의의 이름(prj)에서 새롭게 이름을 만듦. 빌드파일의 이름이 contextPath가 된다.   
+      6) 예시
+        (1) prj10.war -> http://localhost:8080/prj10/
+        (2) myapp.war -> http://localhost:8080/myapp/
+        (3) ROOT.war  -> http://localhost:8080/
+         
+   -->
+   
+    
+    
     
   <build>
   

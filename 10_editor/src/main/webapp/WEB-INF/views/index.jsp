@@ -37,7 +37,7 @@
     <button type="submit">전송</button>
   </div>      
   </form>
-  
+            
    <script>
   $(document).ready(function(){  
   $('#contents').summernote({
@@ -74,6 +74,6 @@
   });
   })
   </script>
-
+        
 </body>
 </html>
