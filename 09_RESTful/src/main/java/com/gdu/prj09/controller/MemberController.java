@@ -33,7 +33,7 @@ import lombok.RequiredArgsConstructor;
  *  2) 상세    /members/1                  |  GET 
  *  3) 삽입    /members                    |  POST
  *  4) 수정    /members                    |  PUT
- *  4) 삭제    /member/1                  |  DELETE
+ *  4) 삭제    /member/1                   |  DELETE
  *             /members/1,2,3              |
  *             
  *  // 지난번에 form 데이터로 body에 실어 보냈다면 이번에는 json으로 만들것임. json이 더 쉬운 면도 있음
