@@ -10,13 +10,17 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
+
+@PropertySource(value = "classpath:email.properties")            // properties 들어가는 resources!! 그 resources 까지가 classpath 이다.
 public class MyJavaMailUtils {
 
+  @Autowired     // 기본 제공되는 bean임. 이미 존재하므로 주입해주기만 하면 된다.
+  private Environment env;  
+  
   public void sendMail(String to, String subject, String content) {
-    
-    
-    
-    
     
     // 이메일을 보내는 호스트의 정보 : 구글  (아래의 입력은 구글의 메뉴얼대로 약속된 입력양식임)
     Properties props = new Properties();
@@ -29,7 +33,7 @@ public class MyJavaMailUtils {
     Session session = Session.getInstance(props, new Authenticator() {      // 이러면 자동으로!!! 안나오지만..컨스 하면 나옵니다 헤헤
       @Override
       protected PasswordAuthentication getPasswordAuthentication() {
-        return new PasswordAuthentication("gmail", "password"); // 이 부분이 깃에 올라가면 안되는 부분. 별도의 파일로 빼고 ignore 처리를 한다.
+        return new PasswordAuthentication(env.getProperty("spring.mail.username"), env.getProperty("spring.mail.password")); // 이 부분이 깃에 올라가면 안되는 부분. 별도의 파일로 빼고 ignore 처리를 한다.
       }
     });
     
@@ -37,7 +41,7 @@ public class MyJavaMailUtils {
       
       // 메일 만들기 (보내는 사람 + 받는 사람 + 제목 + 내용)
       MimeMessage mimeMessage = new MimeMessage(session); // 바로 위에서 만든 session(보내는 호스트정보가 들어있음)
-      mimeMessage.setFrom(new InternetAddress("gmail", "myapp")); //gmail 부분은 마찬가지로 ignore 처리. 뒷부분은 별명같은거. 보내는 사람은 정해져있다.
+      mimeMessage.setFrom(new InternetAddress(env.getProperty("spring.mail.username"), "myapp")); //gmail 부분은 마찬가지로 ignore 처리. 뒷부분은 별명같은거. 보내는 사람은 정해져있다.
       mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(to)); // 받는 사람의 이메일 to. 파라미터로 받아온다.
       mimeMessage.setSubject(subject);                                             // subject. 제목도 파라미터로 받아온다
       mimeMessage.setContent(content, "text/html; charset=UTF-8");                                   // 내용도 파라미터로 받아온다.
