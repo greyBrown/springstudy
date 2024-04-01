@@ -59,6 +59,28 @@ const fnGetContextPath = ()=>{
 	const end = url.indexOf('/', begin + 1);
 	return url.substring(begin, end);
 }
+ <%-- 만약 ajax를 썻다면 이렇게 돌아돌아가야한다.(Promise 객체가 내장되어 있지 않기 때문)
+ new Promise((resolve, reject) => {
+$.ajax({
+url: '이메일중복체크요청'
+})
+.done(resData => {
+if(resData.enableEmail){
+resolve();       
+} else {
+reject();}})})
+.then( () => {   
+  $.ajax({             
+  url: '인증코드전송요청'
+    })
+.done(resData => {
+   if(resData.code == 인증코드입력값
+   })
+})       
+.catch(()=>{   // 실패
+}) 
+ --%>
+ <%-- 이렇게 비동기처리가 연속적으로 필요할 때는 fetch를 쓰는 것이 훨씬훨씬 간단하다.  --%>
  
 const fnCheckEmail = ()=>{
 	let email = document.getElementById('email');
@@ -75,7 +97,26 @@ const fnCheckEmail = ()=>{
 		body: JSON.stringify({ //자바스크립트 객체를 JSON으로 변환해주는 메소드
 			'email':email.value
 		})
-	});
+	})
+	.then(response=>response.json()) // 받아온 응답 객체 데이터에서 json만 꺼내겠다. 이 json이 promise와 함께 오니까 다시 then.
+	.then(resData => {                
+		// 만약 $ajax로 처리했다면 new promise가 나오게 되는 예제이다. 비동기작업을 순차적으로 처리해야하기 때문에... 
+		// 여기선 fetch가 좋은 선택임. promise가 내장되어 있기 때문에 따로 불러올 필요가 없다.
+		if(resData.enableEmail){
+			fetch(fnGetContextPath() + '/user/sendCode.do', {    // 이메일 중복체크 통과하면 이메일인증 시작하기. 이렇게 순서대로 진행해야 하기때문에 promise가 필요해 진다는 것.        
+				method: 'POST',
+			    headers: {
+			        'Content-Type': 'application/json'
+			      },
+			      body: JSON.stringify({ 
+			        'email':email.value
+			     })
+			});  
+		} else {
+			document.getElementById('msg-email').innerHTML = '이미 사용 중인 이메일입니다.';
+			return;
+		}
+	})
 } 
 
 document.getElementById('btn-code').addEventListener('click', fnCheckEmail);

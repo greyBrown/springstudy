@@ -72,9 +72,18 @@ public class UserController {
   
   @PostMapping(value="/checkEmail.do", produces="application/json")
   public ResponseEntity<Map<String, Object>> checkEmail(@RequestBody Map<String, Object> params){
-    System.out.println(params);
-    return new ResponseEntity<>(HttpStatus.OK); // 요렇게 생략한 모습으로 넘길 수 있음. generic들은 생성시점의 타입은 생략할 수 있다.
+   
+   return userService.checkEmail(params); 
+    
+   // 리턴값 잘 나오는지 먼저 확인...return new ResponseEntity<>(HttpStatus.OK); // 요렇게 생략한 모습으로 넘길 수 있음. generic들은 생성시점의 타입은 생략할 수 있다.
   }
+  
+  @PostMapping(value="/sendCode.do", produces="application/json")
+  public ResponseEntity<Map<String, Object>> sendCode(@RequestBody Map<String, Object> params){
+    System.out.println(params);
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+  
   
   
   

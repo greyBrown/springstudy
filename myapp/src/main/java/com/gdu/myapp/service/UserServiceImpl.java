@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -76,13 +77,14 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public ResponseEntity<Map<String, Object>> checkEmail(Map<String, Object> params) {
-    // TODO Auto-generated method stub
-    return null;
-  }
+    boolean enableEmail = userMapper.getUserByMap(params) == null
+                       && userMapper.getLeaveUserByMap(params) == null;
+    return new ResponseEntity<>(Map.of("enableEmail", enableEmail), HttpStatus.OK);
+  } //계속 언급되는 것 : 응답도 JSON으로 만드는데 이 JSON 대신 만드는게 ResponseEntity. 이 데이터가 fetch로 넘어간다.
   
   @Override
   public void signout(HttpServletRequest request, HttpServletResponse response) {
-    // TODO Auto-generated method stub
+    // TODO Auto-generated method stub  
 
   }
 
