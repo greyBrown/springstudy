@@ -73,6 +73,8 @@
   <!-- AspectJ 허용(@EnableAspectAutoProxy) -->
   <aop:aspectj-autoproxy/>
   
+  
+  <!-- Mapper Interface가 저장된 패키지 명시. 마이바이티스에게...mapper가 여기 있음!! 이라고 명시해준다. -->
   <mybatis-spring:scan base-package="com.gdu.myapp.mapper"/>
   
  

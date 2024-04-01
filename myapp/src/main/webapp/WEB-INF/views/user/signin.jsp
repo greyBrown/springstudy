@@ -26,6 +26,7 @@
   <div>
     <form method="POST"
           action="${contextPath}/user/signin.do">
+   <!-- 페이지를 구분하고 있음! 로직이 있거나 처리해야할 작업이 있으면 do, 단순한 페이지 이동이면 page -->
       <div>
         <label for="email">아이디</label>
         <input type="text" id="email" name="email" placeholder="example@naver.com">

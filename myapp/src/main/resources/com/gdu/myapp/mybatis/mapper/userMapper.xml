@@ -27,7 +27,7 @@
       , SIGNIN_DT
       , SIGNOUT_DT
     ) VALUES (
-        ACCESS_HISTORY_SEQ.NEXTVAL
+        ACCESS_SEQ.NEXTVAL
       , #{email}
       , #{ip}
       , CURRENT_DATE
