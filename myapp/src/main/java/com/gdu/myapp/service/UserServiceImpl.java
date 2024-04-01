@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.gdu.myapp.dto.UserDto;
 import com.gdu.myapp.mapper.UserMapper;
+import com.gdu.myapp.utils.MyJavaMailUtils;
 import com.gdu.myapp.utils.MySecurityUtils;
 
 @Service
@@ -20,10 +21,13 @@ public class UserServiceImpl implements UserService {
   private final UserMapper userMapper;
   //원래 인터페이스는 객체생성이 안되지만 마이바티스 업그레이드로 사용자 편의를 위해 지원된다.
   
-//@Autowired 생략
-  public UserServiceImpl(UserMapper userMapper) {
+  private final MyJavaMailUtils myJavaMailUtils;
+  
+  // @autoweird 는 생략. 생성자를 직접 만들었으니까
+  public UserServiceImpl(UserMapper userMapper, MyJavaMailUtils myJavaMailUtils) {
     super();
     this.userMapper = userMapper;
+    this.myJavaMailUtils = myJavaMailUtils;
   }
 
   @Override
@@ -81,6 +85,34 @@ public class UserServiceImpl implements UserService {
                        && userMapper.getLeaveUserByMap(params) == null;
     return new ResponseEntity<>(Map.of("enableEmail", enableEmail), HttpStatus.OK);
   } //계속 언급되는 것 : 응답도 JSON으로 만드는데 이 JSON 대신 만드는게 ResponseEntity. 이 데이터가 fetch로 넘어간다.
+  
+  
+  @Override
+  public ResponseEntity<Map<String, Object>> sendCode(Map<String, Object> params) {
+    
+    /*
+     * 구글 앱 비밀번호 설정 방법
+     * 1. 구글에 로그인한다.
+     * 2. [계정] - [보안]
+     * 3. [Google에 로그인하는 방법] - [2단계 인증]을 사용 설정한다.
+     * 4. 검색란에 "앱 비밀번호"를 검색한다.
+     * 5. 앱 이름을 "myapp"으로 작성하고 [만들기] 버튼을 클릭한다.
+     * 6. 16자리 비밀번호가 나타나면 복사해서 사용한다. (비밀번호 사이 공백은 모두 제거한다.)
+     */
+    
+    
+    // 인증코드 생성
+    String code = MySecurityUtils.getRandomString(6, true, true);  // 둘 다 false만 아니면 됨 ㅎㅎ 
+    
+    // 메일 보내기
+    myJavaMailUtils.sendMail((String)params.get("email")
+                           ,"myapp 인증요청" 
+                           , "<div>인증코드는 <strong>" + code + "</strong> 입니다.");
+    
+    // 인증코드 입력화면으로 보내주는 값
+    return new ResponseEntity<>(Map.of("code", code), HttpStatus.OK);
+  }
+  
   
   @Override
   public void signout(HttpServletRequest request, HttpServletResponse response) {

@@ -32,23 +32,23 @@
  <h1>Sign Up</h1>
  
  <!-- 정규식으로 양식한번 걸러내고, 이메일인증(자바로 가능!) 해 볼 겁니당 오오 이메일인증 폰 인증은 안해요 : 사유 돈들음 -->
- <form method="POST"
-       action="${contextPath}/user/signup.do"
-       id="frm-signup">
- 
- <!-- bootstrap class를 적용해봄 -->
- <div class="mb-3"> 
-  <label for="email">아이디</label>
-  <input type="text" id="email" name="email" placeholder="example@example.com">
-  <button type="button" id="btn-code">인증코드받기</button>
-  <div id="msg-email"></div>
- </div>
- <div class="mb-3">
- <input type="text" id="code" placeholder="인증코드입력" disabled>
- <button type="button" class="btn btn-primary" id="btn-verify-code">인증하기</button>
- </div>
-       
- </form>
+   <form method="POST"
+         action="${contextPath}/user/signup.do"
+         id="frm-signup">
+   
+   <!-- bootstrap class를 적용해봄 -->
+   <div class="mb-3"> 
+    <label for="inp-email">아이디</label>
+    <input type="text" id="inp-email" name="email" placeholder="example@example.com">
+    <button type="button" id="btn-code">인증코드받기</button>
+    <div id="msg-email"></div>
+   </div>
+   <div class="mb-3">
+   <input type="text" id="inp-code" placeholder="인증코드입력" disabled>
+   <button type="button" class="btn btn-primary" id="btn-verify-code">인증하기</button>
+   </div>
+         
+   </form>
   
  <script>
 
@@ -83,9 +83,9 @@ reject();}})})
  <%-- 이렇게 비동기처리가 연속적으로 필요할 때는 fetch를 쓰는 것이 훨씬훨씬 간단하다.  --%>
  
 const fnCheckEmail = ()=>{
-	let email = document.getElementById('email');
+	let inpemail = document.getElementById('inp-email');
 	let regEmail = /^[A-Za-z0-9-_]{2,}@[A-Za-z0-9]{2,}(\.[A-Za-z]{2,6}){1,2}$/;
-	if(!regEmail.test(email.value)){
+	if(!regEmail.test(inpemail.value)){
 		alert('이메일 형식이 올바르지 않습니다.');
 		return;
 	}
@@ -95,7 +95,7 @@ const fnCheckEmail = ()=>{
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify({ //자바스크립트 객체를 JSON으로 변환해주는 메소드
-			'email':email.value
+			'email':inpemail.value
 		})
 	})
 	.then(response=>response.json()) // 받아온 응답 객체 데이터에서 json만 꺼내겠다. 이 json이 promise와 함께 오니까 다시 then.
@@ -109,9 +109,23 @@ const fnCheckEmail = ()=>{
 			        'Content-Type': 'application/json'
 			      },
 			      body: JSON.stringify({ 
-			        'email':email.value
+			        'email':inpemail.value
 			     })
-			});  
+			})
+			.then(response => response.json())
+			.then(resData => {   //resData = {"code":"123qaz"}
+	      let inpcode = document.getElementById('inp-code');
+			  let btnVerifyCode = document.getElementById('btn-verify-code');
+  			alert(inpemail.value + '로 인증코드를 전송했습니다.');
+		    inpcode.disabled = false;
+		    btnVerifyCode.addEventListener('click', (evt) => {
+          	if(resData.code === inpcode.value){
+          		alert('인증되었습니다.');
+          	} else{
+          		alert('인증되지 않았습니다.');
+          	}
+		    })
+			})
 		} else {
 			document.getElementById('msg-email').innerHTML = '이미 사용 중인 이메일입니다.';
 			return;
@@ -123,6 +137,8 @@ document.getElementById('btn-code').addEventListener('click', fnCheckEmail);
 
 // POST 방식으로 email을 JSON 데이터로 만들어 controller로 보낼 것임
 // -> 받는 쪽에서는 @RequestBody로 받는다. 받을 때 쓸 도구는 MAP이다. (Jackson이 상호 맵핑을 돕는다 (JSON <-> MAP)) 
+
+// 한번에 받았다!!! ㅠㅠㅠ
  
  
  
