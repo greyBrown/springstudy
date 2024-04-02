@@ -50,7 +50,39 @@
           
   <insert id="insertUser"
           parameterType="UserDto">
-            
+    INSERT INTO USER_T (
+        USER_NO
+      , EMAIL
+      , PW
+      , NAME
+      , GENDER
+      , MOBILE
+      , EVENT_AGREE
+      , SIGNUP_KIND
+      , PW_MODIFY_DT
+      , SIGNUP_DT  
+     ) VALUES (
+       USER_SEQ.NEXTVAL
+     , #{email}
+     , #{pw}
+     , #{name}
+     , #{gender}
+     , #{mobile}
+     , #{eventAgree}
+     , 0
+     , CURRENT_DATE 
+     , CURRENT_DATE 
+    )
+    <!--  프로젝트 할때 비밀번호 변경후 30일 경과 이런걸 해보는 것도 좋음. current_date로 기록만 남기고 있는데 이제 30일 지나면 비밀번호 바꾸는 페이지로 빼주고...
+    30일 동안 알리지 않기 이런 버튼 추가해주는 것도 있고요(비밀번호 수정일 +30 이런식으로도 함ㅋㅋ 좀더 정식적으로는 칼럼을 추가하는 방법도 있고...)!-->
+    
   </insert>
+
+<delete id="deleteUser">
+  DELETE 
+  FROM USER_T
+  WHERE USER_NO = #{userNo}
+</delete>
+
 
 </mapper>

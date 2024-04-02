@@ -1,9 +1,12 @@
 package com.gdu.myapp.controller;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +17,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
+import com.gdu.myapp.dto.UserDto;
 import com.gdu.myapp.service.UserService;
 
 @RequestMapping("/user")
@@ -57,6 +62,27 @@ public class UserController {
     // Sign In 페이지로 url 넘겨 주기
     model.addAttribute("url", url);
     
+    
+    /******************* 네이버 로그인 1*/
+    String redirectUri = "http://localhost:8080" + request.getContextPath() + "/user/naver/getAccessToken.do";
+    String state = new BigInteger(130, new SecureRandom()).toString();
+    // state 이렇게 뽑으라고 개발자센터 메뉴얼에 나온다
+    
+    StringBuilder builder = new StringBuilder();
+    builder.append("https://nid.naver.com/oauth2.0/authorize");
+    builder.append("?response_type=code");
+    builder.append("&client_id=XeShO8IjERM4jJY5KFwX");
+    builder.append("&redirect_uri=" + redirectUri);
+    // 네이버 로그인 2단계에서 어느 주소로 접속할건지(redirect_url) 그 주소를 알려달라. 그 주소가 맞으면 해주고 아니면 안해주겠다.
+    // 이후 토큰으로도 검증함. 너가 준 토큰이랑 내가 발급한 토큰이랑 맞으면 너라고 인증해주겠다.
+    // 네이버 로그인 Callback URL  <<< 사용하기로 한 주소를 등록해줌. 크게 두가지 토큰 받는거 프로필(고객이 동의한 개인정보) 받는거
+    // 우리 이 주소로 너희한테 정보 요청할거다. 그 주소 등록. localhost:8080 이 부분은 나중에 배포할 때 싹 들어내고 바꿔야 함
+    builder.append("&state=" + state);
+    
+    model.addAttribute("naverLoginUrl", builder.toString());
+    // 이 model에 저장된 정보는 jsp로 포워딩 된다. signin 페이지에서 naverLoginUrl를 EL로 확인할 수 있어짐.
+    
+    
     return "user/signin"; 
   }
   
@@ -83,6 +109,22 @@ public class UserController {
    return userService.sendCode(params);
   }
   
+  @PostMapping("/signup.do")
+  public void signup(HttpServletRequest request, HttpServletResponse response) {
+    userService.signup(request, response);
+  }
+  
+  @GetMapping("/leave.do")
+  public void leave(HttpServletRequest request, HttpServletResponse response) {
+   // 1. request로 session 가져오기 2. HttpSession 바로 선언하기 3. @SessionAttribute(name="user") UserDto user로 가져오기
+   // 2번의 경우 UserDto user = (UserDto) session.getAttribute("user"); 이렇게~ 난 1번과 2번의 혼종을 썼구나....
+   // 여기선 첫번째 껄로 합니다. 3번 궁금한데 나중에 한번 해보기
+    
+    userService.leave(request, response);
+    
+    
+    
+  }
   
   
   

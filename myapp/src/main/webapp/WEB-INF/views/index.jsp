@@ -46,7 +46,18 @@
   <c:if test="${sessionScope.user != null}">
     ${sessionScope.user.name}님 반갑습니다
     <!-- serviceImpl에서 session에 저장해놓은 그 정보 -->
+    <a href="${contextPath}/user/signout.do">로그아웃</a>
+    <!-- 로그아웃 알아서 해봐요! 이제 네이버로그인하러 갑니다... -->
+    <a href="${contextPath}/user/leave.do">회원탈퇴</a>
   </c:if>
+  XeShO8IjERM4jJY5KFwX
+  pjz2dxpwH2
+  
+  <!--  네이버 로그인
+  1. 로그인 연동 URL 생성하기
+  <a href="https://nid.naver.com/oauth2.0/authorize?파라미터"></a>
+  2. state 값을 java에서 만들어서 jsp로 전달해야함(즉 모든 주소를 그냥 자바에서 만들어 건내는게 편하다)
+   -->
   
   
   

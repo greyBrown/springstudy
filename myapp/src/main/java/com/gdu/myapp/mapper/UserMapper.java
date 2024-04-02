@@ -14,6 +14,8 @@ public interface UserMapper {
   int insertAccessHistory(Map<String, Object>map);
   LeaveUserDto getLeaveUserByMap(Map<String, Object> map);
   int insertUser(UserDto user);
+  int deleteUser(int userNo);
+  
   
   /* 인터페이스의 메소드 이름이 mapper의 메소드 메소드 이름이 된다.
    * java : mapper       mybatis: mapper
