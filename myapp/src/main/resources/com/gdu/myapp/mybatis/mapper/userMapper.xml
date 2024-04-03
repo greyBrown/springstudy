@@ -84,5 +84,12 @@
   WHERE USER_NO = #{userNo}
 </delete>
 
+  <update id="updateAccessHistory">
+    UPDATE ACCESS_HISTORY_T
+       SET SIGNOUT_DT = CURRENT_DATE
+     WHERE SIGNOUT_DT = NULL
+       AND SESSION_ID = #{sessionId} 
+  </update>
+
 
 </mapper>

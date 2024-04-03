@@ -50,8 +50,6 @@
     <!-- 로그아웃 알아서 해봐요! 이제 네이버로그인하러 갑니다... -->
     <a href="${contextPath}/user/leave.do">회원탈퇴</a>
   </c:if>
-  XeShO8IjERM4jJY5KFwX
-  pjz2dxpwH2
   
   <!--  네이버 로그인
   1. 로그인 연동 URL 생성하기
