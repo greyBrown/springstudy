@@ -23,6 +23,22 @@
 	
 	<context:component-scan base-package="com.gdu.myapp" />
 	
+  
+  <!-- 인터셉터 등록 : 지난번에 비해 좀더 축약버전! 아마 이걸 쓰게 되겠죱 -->
+  <!--  이제 로그인안하고 작성하기 누르면 '로그인하세요'가 뜬다 -->
+  <interceptors>
+    <interceptor>
+      <mapping path="/bbs/write.page"/>
+      <beans:bean class="com.gdu.myapp.interceptor.RequiredSigninInterceptor"/>    
+    </interceptor>
+    
+   <interceptor>
+      <mapping path="/user/signin.page"/>
+      <mapping path="/user/signup.page"/>
+      <beans:bean class="com.gdu.myapp.interceptor.RequiredSignoutInterceptor"/>    
+    </interceptor>
+    
+  </interceptors>
 	
 	
 </beans:beans>

@@ -106,10 +106,11 @@
 
 </div>
   
- <script src="${contextPath}/resouces/js/signup.js?dt=${dt}"></script>
+  <script src="${contextPath}/resources/js/signup.js?dt=${dt}"></script>
  <!-- resources 는 contextPaht 로 접근하는 곳이다. -->
+
+<%@ include file="../layout/footer.jsp" %>
+
  
- <%@ include file="../layout/footer.jsp" %>
+
   
-</body>
-</html>

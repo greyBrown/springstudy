@@ -88,8 +88,6 @@ public class UserController {
     return path;
   }
   
-  
-  
   @PostMapping(value="/checkEmail.do", produces="application/json")
   public ResponseEntity<Map<String, Object>> checkEmail(@RequestBody Map<String, Object> params){
    

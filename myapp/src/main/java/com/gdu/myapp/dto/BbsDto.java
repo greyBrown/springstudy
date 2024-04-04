@@ -16,7 +16,7 @@ public class BbsDto {
   private int bbsNo, state, depth, groupNo, groupOrder;
   private String contents;
   private Date createDt;
-  private UserDto userDto; // userNo를 넣지 않는다!!! userDto를 넣는다.
+  private UserDto user; // userNo를 넣지 않는다!!! userDto를 넣는다.
   
   
   

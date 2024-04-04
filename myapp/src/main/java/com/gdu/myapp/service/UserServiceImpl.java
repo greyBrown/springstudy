@@ -302,7 +302,7 @@ public class UserServiceImpl implements UserService {
     StringBuilder builder = new StringBuilder();
     builder.append("https://nid.naver.com/oauth2.0/authorize");
     builder.append("?response_type=code");
-    builder.append("&client_id=XeShO8IjERM4jJY5KFwX");
+    builder.append("&client_id=" + clientId);
     builder.append("&redirect_uri=" + redirectUri);
     // 네이버 로그인 2단계에서 어느 주소로 접속할건지(redirect_url) 그 주소를 알려달라. 그 주소가 맞으면 해주고 아니면 안해주겠다.
     // 이후 토큰으로도 검증함. 너가 준 토큰이랑 내가 발급한 토큰이랑 맞으면 너라고 인증해주겠다.
