@@ -23,9 +23,7 @@ public class RequiredSignoutInterceptor implements HandlerInterceptor {
       out.println("history.back()");
       out.println("</script>");
       return false;
-      
     }
-    
     return true;
     
   }

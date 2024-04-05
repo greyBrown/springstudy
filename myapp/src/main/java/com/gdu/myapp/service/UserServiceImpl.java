@@ -55,11 +55,17 @@ public class UserServiceImpl implements UserService {
       // 접속 IP(접속 기록을 남길 때 필요한 정보)
       String ip = request.getRemoteAddr();
       
+      // 접속 수단 (요청 헤더의 User-Agent 값)
+      String userAgent = request.getHeader("User-Agent");
       
-      // DB로 보낼 정보 (email/pw : USER_T, email/ip: ACCESS_HISTORY_T) 
+      
+      // DB로 보낼 정보  (email/pw: USER_T , email/ip/userAgent/sessionId: ACCESS_HISTORY_T) 
       Map<String, Object> params = Map.of("email", email
                                         , "pw", pw
-                                        , "ip", ip);
+                                        , "ip", ip
+                                        ,"userAgent", request.getHeader("User-Agent")   // 세션아이디 기록을 위한 코드추가
+                                        ,"sessionId", request.getSession().getId());                              
+          
       
       // email/pw 가 일치하는 회원 정보 가져오기
       UserDto user = userMapper.getUserByMap(params);
@@ -69,7 +75,12 @@ public class UserServiceImpl implements UserService {
         // 접속 기록 ACCESS_HISTORY_T 에 남기기
         userMapper.insertAccessHistory(params);
         // 회원 정보를 세션(브라우저 닫기 전까지 정보가 유지되는 공간, 기본 30분 정보 유지)에 보관하기
-        request.getSession().setAttribute("user", user); // 이런 session 등에 저장한 데이터명 같은거 팀원 전부가 잘 공유해야 한다. 시작할때 정하고 시작함.
+        // 이런 session 등에 저장한 데이터명 같은거 팀원 전부가 잘 공유해야 한다. 시작할때 정하고 시작함.
+        HttpSession session = request.getSession();
+        session.setAttribute("user", user);
+        session.setAttribute("user", user);
+      //session.setMaxInactiveInterval(10); // 세션 유지 시간 10초 설정.
+        
        // Sign In 후 페이지 이동
         response.sendRedirect(request.getParameter("url"));
       // 일치하는 회원 없음 (Sign In 실패)
@@ -161,8 +172,11 @@ public class UserServiceImpl implements UserService {
       out.println("<script>");
       // 가입 성공
       if(insertCount == 1) {
+        
         // Sign In 및 접속 기록을 위한 Map
-        Map<String, Object> map = Map.of("email", email, "pw", pw, "ip", request.getRemoteAddr());
+        Map<String, Object> map = Map.of("email", email, "pw", pw, "ip", request.getRemoteAddr()
+                                          ,"userAgent", request.getHeader("User-Agent")   // 세션아이디 기록을 위한 코드추가
+                                          ,"sessionId", request.getSession().getId());
         
         // Sign in(세션에 user 저장하기)
         request.getSession().setAttribute("user", userMapper.getUserByMap(map));

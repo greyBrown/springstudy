@@ -18,18 +18,28 @@
     </where>
   </select>
 
-  <insert id="insertAccessHistory"
+<insert id="insertAccessHistory"
           parameterType="Map">
-    INSERT INTO ACCESS_HISTORY_T (
+ <!-- 이 작업으로 로그아웃버튼 누르고 나간 user의 기록은 남는다. -->
+ <!--  + 세션만료 시간은 스프링을 알 수 있다. 그래서 세션이 만료되어 로그아웃된 기록도 추가할 수 있음 
+ 세션 닫혔나 안닫혔나 보고있는 친구가 HttpSessionListener 1. 세션 새로 만들어짐 2. 세션 종료됨. 이 두가지를 캐치하는 친구임.
+ 자동로그인 할때 쓰는 것도 세션임. 기본적인 아이디어는 사용자 컴퓨터(즉 쿠키)에 정보를 두고 로그인을 시킴. -> 보안상으로 아주 위험함.
+ 대신에 세션 아이디값을 둠. 그 값을 서버에 남겨놓고 사용자는 쿠키로 가지고 있음. 그 쿠키값이랑 동일한 데이터가 DB 있으면 로그인을 시켜줌.
+ 보안문제 때문에 요새는 거의 안씀 ㅎ..... +쿠키는 기본 15일 -->         
+   INSERT INTO ACCESS_HISTORY_T (
         ACCESS_HISTORY_NO
       , EMAIL
       , IP
+      , USER_AGENT
+      , SESSION_ID
       , SIGNIN_DT
       , SIGNOUT_DT
     ) VALUES (
-        ACCESS_SEQ.NEXTVAL
+        ACCESS_HISTORY_SEQ.NEXTVAL
       , #{email}
       , #{ip}
+      , #{userAgent}
+      , #{sessionId}
       , CURRENT_DATE
       , NULL
     )

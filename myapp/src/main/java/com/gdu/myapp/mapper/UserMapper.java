@@ -3,14 +3,12 @@ package com.gdu.myapp.mapper;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.stereotype.Component;
 
 import com.gdu.myapp.dto.LeaveUserDto;
 import com.gdu.myapp.dto.UserDto;
 
 
 @Mapper
-@Component
 public interface UserMapper {
   UserDto getUserByMap(Map<String, Object> map);
   int insertAccessHistory(Map<String, Object>map);

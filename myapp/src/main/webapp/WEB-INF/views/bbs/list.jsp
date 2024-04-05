@@ -18,6 +18,22 @@
  <a href="${contextPath}/bbs/write.page">작성하러가기</a>
  <!-- spa가 아니니까 이동~ 페이지 안바뀌고 여기 목록에서 작성한다면 ajax나 fetch 같은 비동기통신 나와야한다. -->
  
+ <div>
+ <!--  검색할 때 쓰는 method 는 GET. 검색에 POST 쓰지 않는다. -->
+  <form method="GET"
+        action="${contextPath}/bbs/search.do">
+    <div>
+      <select name="column">
+      <!-- value 대문자로 적은 이유 : 이걸 쿼리문에 심겠다는 빅픽쳐. 여기서부터 심어놓습니당 <<< 쿼리문을 짜보면 테이블 별명이 필요하다는 걸 알게됨. 여기에 넣어준다.-->
+        <option value="U.EMAIL">작성자</option>
+        <option value="B.CONTENTS">내용</option>
+      </select>    
+      <input type="text" name="query" placeholder="검색어입력">
+      <button type="submit">검색</button>
+    </div>   
+  </form>
+ </div>
+ 
  <table border="1">
     <thead>
     <tr>

@@ -110,5 +110,30 @@
        SET STATE = 0
      WHERE BBS_NO = #{bbsNo}
   </update>
-
+  
+  <!-- 검색은 목록보기 처리이다. 검색된 데이터의 게시글수, 게시글 목록이 필요함. -->
+  <!-- 검색 결과 개수. JOIN이 필요하다.(EMAIL이 BBS_T에 없다) -->
+  <select id="getSearchCount"
+          parameterType="Map"
+          resultType="int">
+  SELECT COUNT(*)
+    FROM USER_T U INNER JOIN BBS_T B
+      ON U.USER_NO = B.USER_NO
+   WHERE ${column} LIKE '%' || #{query} || '%'
+  </select>
+  
+  <!-- 검색 결과 목록 -->
+  <!-- (서브쿼리 + where) 절 처리 (서브쿼리 FROM에 걸든 WHERE 걸든 상관 없지만 FROM에 거는게 보기 좋아서 계속 그렇게 합니당 -->
+  <!-- 변수 4가지가 들어간다! 칼럼, 쿼리, 비긴, 엔드 -->
+ <select id="getSearchList"
+          parameterType="Map"
+          resultMap="BbsMap">          
+    SELECT BBS_NO, CONTENTS, USER_NO, EMAIL, CREATE_DT, STATE, DEPTH, GROUP_NO, GROUP_ORDER
+      FROM (SELECT ROW_NUMBER() OVER(ORDER BY GROUP_NO DESC, GROUP_ORDER ASC) AS RN, B.BBS_NO, B.CONTENTS, U.USER_NO, U.EMAIL, B.CREATE_DT, B.STATE, B.DEPTH, B.GROUP_NO, B.GROUP_ORDER
+              FROM USER_T U INNER JOIN BBS_T B
+                ON U.USER_NO = B.USER_NO
+             WHERE ${column} LIKE CONCAT(CONCAT('%', #{query}), '%'))
+     WHERE RN BETWEEN #{begin} AND #{end}
+ </select>
+  
 </mapper>
