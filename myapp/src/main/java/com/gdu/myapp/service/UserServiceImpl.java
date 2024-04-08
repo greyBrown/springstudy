@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
         session.setAttribute("user", user);
-      //session.setMaxInactiveInterval(10); // 세션 유지 시간 10초 설정.
+       session.setMaxInactiveInterval(60 * 10); // 세션 유지 시간 1800초(30분) 설정.
         
        // Sign In 후 페이지 이동
         response.sendRedirect(request.getParameter("url"));

@@ -31,8 +31,6 @@ public class BlogServiceImpl implements BlogService {
   private final BlogMapper blogMapper;
   private final MyPageUtils myPageUtils;
   private final MyFileUtils myFileUtils;
-  private ServletContext servlet;
-  
   
   @Override
   public ResponseEntity<Map<String, Object>> summernoteImageUpload(MultipartFile multipartFile) {
@@ -103,7 +101,6 @@ public class BlogServiceImpl implements BlogService {
         // /myapp/upload/2024/04/08/6378b5d4275d4138bf657431d2e67369.jpg이게 뜬다. src가 뜸. 이걸 자르고 붙여서 경로랑 이름만 뽑거나 등등
       }
     }
-    
     // DB에 blog 저장
     return blogMapper.insertBlog(blog);
   }
@@ -129,9 +126,17 @@ public class BlogServiceImpl implements BlogService {
                                     , "end", myPageUtils.getEnd());
     
     // 목록 화면으로 반환할 값 (목록 + 전체 페이지 수) 
-    return new ResponseEntity<>(Map.of("blogList", blogMapper.getBlogList(map)
+    
+  
+    return new ResponseEntity<>(Map .of("blogList", blogMapper.getBlogList(map)
                                       , "totalPage", myPageUtils.getTotalPage())
-                                , HttpStatus.OK);
+                                        , HttpStatus.OK);
+    
+  }
+  
+  @Override
+  public BlogDto getBlogByNo(int blogNo) {
+    return blogMapper.getBlogByNo(blogNo);
   }
   
 }

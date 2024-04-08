@@ -40,8 +40,9 @@ public class MySecurityUtils {
     *      "<" 기호와 ">" 기호를 엔티티 코드로 변환한다.
     */
    public static String getPreventXss(String original) {
-     return original.replace("<", "&lt;").replace(">", "&gt;"); //html 태그를 일반 문자열로 변환
-   }
+     return original.replace("<script>", "&lt;script&gt;").replace("</script>", "&lt;/script&gt;"); //html 태그를 일반 문자열로 변환
+     
+   } // 에디터에서 기존 < > 가 무력화되어서 <script> 태그 자체를 문자열로 바꾸는 걸로 변경
   
    /*
     * 인증 코드

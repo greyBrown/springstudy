@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,7 +45,7 @@ public class BlogController {
   @PostMapping("/register.do")
   public String register(HttpServletRequest request, RedirectAttributes redirectAttributes) {
     redirectAttributes.addFlashAttribute("insertCount", blogService.registerBlog(request));
-    return "redirect:/blog/list.do";
+    return "redirect:/blog/list.page";
   }
   
   @GetMapping(value="/getBlogList.do", produces="application/json")
@@ -53,6 +54,19 @@ public class BlogController {
   }
   
   
+  @GetMapping("/detail.do")
+  public String detail(@RequestParam int blogNo, Model model) {
+    model.addAttribute("blog", blogService.getBlogByNo(blogNo));
+    return "blog/detail";
+  }
+  
+  @PostMapping(value="/registerComment.do", produces = "application/json")
+  public ResponseEntity<Map<String, Object>> registerComment(HttpServletRequest request){
+    System.out.println(request.getParameter("contents"));
+    System.out.println(request.getParameter("blogNo"));
+    System.out.println(request.getParameter("userNo"));
+    return new ResponseEntity<>(null);
+  }
   
   
   

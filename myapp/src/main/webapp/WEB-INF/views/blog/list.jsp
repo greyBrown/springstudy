@@ -7,7 +7,7 @@
 
 
 <jsp:include page="../layout/header.jsp"/>
-
+ 
 <style>
 
 .blog {
@@ -60,7 +60,7 @@ const fnGetBlogList = () => {
 	  dataType: 'json',
 	  success: (resData) => {     // resData = {"blogList": [], "totalPage": 10} 스크롤이 증가하는건 최대 totalPage 까지임.
 			totalPage = resData.totalPage;
-	    $.each(resData.blogList, (i, blog) => {
+			 $.each(resData.blogList, (i, blog) => {
 	    	let str = '<div class="blog" data-blog-no="'+ blog.blogNo +'">';
 	    	str += '<span>' + blog.title + '</span>';
 	    	str += '<span>' + blog.user.email + '</span>';
@@ -84,9 +84,55 @@ const fnScrollHandler = () => {
 	
 	// 스크롤이 바닥에 닿으면 page 증가(최대 totalPage 까지) 후 새로운 목록 요청
 	
+	// 타이머 id (동작한 타이머의 동작 취소를 위한 변수)
+	var timerId; //undefined, boolean 의 의미로는 false
 	
-}
+	
+	 /*
+    스크롤 이벤트 발생 → setTimeout() 함수 동작 → 목록 가져옴 → setTimeout() 함수 동작 취소
+  */
+	
+	$(window).on('scroll', (evt) => {  // 스크롤1px 움직일때마다 요청됨. -> 너무 많이 동작한다는 문제점이 생김 -> 이벤트를 몇초간 간격을 두고 동작하게 함.
 
+		if(timerId) {                  //timerId 가 undefined 이면 false, 아니면 true
+                                   //timerId 가 undefined 이면 setTimeout() 함수가 동작한 적 없음. 즉 timerId가 true이려면 undefined가 아니여야 함(=이게 작동한 적이 있다.)
+         clearTimeout(timerId);    // setTimeout() 함수 동작을 취소함 -> 목록을 가져오지 않는다. 타이머의 장점 동작을 취소시킬 수 있음          
+       }  
+		
+		// 500밀리초(0.5초) 후에 () => {}가 동작하는 setTimeOut 함수
+		timerId = setTimeout(() => {
+	/*-------------------------------------------------------------------------------*/
+		 let scrollTop = $(window).scrollTop();
+     let windowHeight = $(window).height();
+     let documentHeight = $(document).height();
+		  
+	  if( (scrollTop + windowHeight + 50) >= documentHeight){  // 스크롤바와 바닥 사이 길이가 50px 이하인 경우
+		  if(page > totalPage) {      // page가 total 보다 커질 때, 즉 더이상 불러올 페이지가 없을 때 ajax 동작하지 않게 멈춤.
+			  return;
+		  }
+		  page++;
+		  fnGetBlogList();
+	  }
+	 /*-------------------------------------------------------------------------------*/
+	// 스크롤 이벤트가 너무나 많이 발생함 -> 0.5초후에 목록을 가져올것. 한번 가져왔다면 더 동작하지 말 것(setTimeOut을 사용). 이렇게 처리해봄.
+		}, 500);
+	})
+	/*  window.addEventListener('scroll', (evt) => {
+	 *  })   jQuery를 쓰지 않는다면ver.
+	 */
+}
+  
+  const fnBlogDetail = () => {
+	  
+	  $(document).on('click', '.blog', (evt) => {
+		 // <div class="blog"> 중 클릭 이벤트가 발생한 <div> : 이벤트 대상
+	   //  alert(evt.target.dataset.blogNo)=alert($(evt.target).data('blogNo'))
+		  location.href = '${contextPath}/blog/detail.do?blogNo=' + evt.target.dataset.blogNo;
+	   
+	   
+	  })
+  }
+  
   
   const fnInsertCount = () => {
 	  let insertCount = '${insertCount}';
@@ -101,6 +147,8 @@ const fnScrollHandler = () => {
   
   fnInsertCount();
   fnGetBlogList();
+  fnBlogDetail();
+  fnScrollHandler();
 </script>
 
  

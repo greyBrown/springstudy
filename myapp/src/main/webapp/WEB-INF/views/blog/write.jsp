@@ -17,6 +17,7 @@
  <form id="frm-blog-register"
        method="POST"
        action = "${contextPath}/blog/register.do">
+ <!-- 삽입할 땐 POST! 고민하지 않기 ㅎㅎ -->      
        
  <div>
   <span>작성자</span>
