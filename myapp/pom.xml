@@ -20,6 +20,17 @@
   
   <dependencies>
   
+  
+  <!-- JAVA HTML Parser(HTML 분석기) JSOUP 라이브러리 -->
+  <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.15.4</version>
+        </dependency>
+  
+  
+  
      <!-- JSON Object 사용을 위한 JSON in JAVA -->
         <dependency>
           <groupId>org.json</groupId>

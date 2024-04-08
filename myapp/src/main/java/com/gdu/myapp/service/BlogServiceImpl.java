@@ -6,15 +6,21 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.gdu.myapp.dto.BlogDto;
+import com.gdu.myapp.dto.UserDto;
 import com.gdu.myapp.mapper.BlogMapper;
 import com.gdu.myapp.utils.MyFileUtils;
 import com.gdu.myapp.utils.MyPageUtils;
+import com.gdu.myapp.utils.MySecurityUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -68,8 +74,64 @@ public class BlogServiceImpl implements BlogService {
 
   @Override
   public int registerBlog(HttpServletRequest request) {
-    // TODO Auto-generated method stub
-    return 0;
+    
+    
+    // 요청 파라미터
+    String title = request.getParameter("title");
+    String contents = request.getParameter("contents");
+    int userNo = Integer.parseInt(request.getParameter("userNo"));
+    
+    // UserDto + BlogDto 객체 생성
+    UserDto user = new UserDto();
+    user.setUserNo(userNo);  // 오랜만에 set 방식으로 한번~
+    BlogDto blog = BlogDto.builder()
+                     .title(MySecurityUtils.getPreventXss(title))
+                     .contents(MySecurityUtils.getPreventXss(contents))
+                     .user(user)
+                   .build();
+                      
+    
+    /* summernote 편집기에서 사용한 이미지 확인하는 방법 */
+    /* 태그를 분석하는 자바 라이브러리 사용 권장(Jsoup 라이브러리 maven - Jsoup Java HTML Parser - 1.15.4). Parser를 통해 여기서도 HTML을 가져올수 있다.*/
+    Document document =  Jsoup.parse(contents);  //(JSOUP 의 document를 선언해준다. 자바의 Document 와 비슷하지만 JSOUP 전용 그런 느낌)
+    Elements elements = document.getElementsByTag("img"); //elements(복수) element(단수) -> Document(DOM)의 하위요소
+    if(elements != null) {  // dom 으로 추출해냈으니 이제 반복문에 넣어서 돌릴 수 있다.  
+      for(Element element : elements) {  // 이미지태그들에서 이미지태그 하나씩 뽑아 for문을 돌린다.
+        String src = element.attr("src");                  // 이미지태그의 attributes인 src를 뽑아낸다. 이렇게 뽑아낸 src를 다양하게 활용(DB에 넣거나 이름만 짤라내거나 등등)
+        /* src 정보를 DB에 저장하는 코드 등이 이 곳에 있으면 된다. 이미지 경로나....삭제할 때 그래야 그 경로 찾아가서 실제 이미지 삭제함*/
+        System.out.println(src);
+        // /myapp/upload/2024/04/08/6378b5d4275d4138bf657431d2e67369.jpg이게 뜬다. src가 뜸. 이걸 자르고 붙여서 경로랑 이름만 뽑거나 등등
+      }
+    }
+    
+    // DB에 blog 저장
+    return blogMapper.insertBlog(blog);
   }
 
+  @Override
+  public ResponseEntity<Map<String, Object>> getBlogList(HttpServletRequest request) {
+    
+    // 전체 블로그 개수
+    int total = blogMapper.getBlogCount();
+    
+    // 스크롤 이벤트마다 가져갈 목록 개수
+    int display = 10;
+    
+    // 현재 페이지 번호
+    int page = Integer.parseInt(request.getParameter("page"));
+    // opt 처리를 안 한 이유는 ajax 처리를 할 것이기 때문에 안넘어올 상황이 거의 없기 때문...하지만 넣어줘도 전혀 상관없음! 지금은 그냥 빼봤어요
+    
+    // 페이징 처리
+    myPageUtils.setPaging(total, display, page);
+    
+    // 목록 가져올 때 전달할 Map 생성
+    Map<String, Object> map = Map.of("begin", myPageUtils.getBegin()
+                                    , "end", myPageUtils.getEnd());
+    
+    // 목록 화면으로 반환할 값 (목록 + 전체 페이지 수) 
+    return new ResponseEntity<>(Map.of("blogList", blogMapper.getBlogList(map)
+                                      , "totalPage", myPageUtils.getTotalPage())
+                                , HttpStatus.OK);
+  }
+  
 }

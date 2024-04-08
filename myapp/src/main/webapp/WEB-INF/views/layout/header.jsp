@@ -22,6 +22,8 @@
   <!-- param.title el 이 지원하는 parameter 불러오는 명칭! 이것도 jsp 어딘가에서 했었다.. -->
 
 
+
+
 <!-- include libraries(jquery, bootstrap) -->
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
@@ -30,6 +32,9 @@
 <link rel="stylesheet" href="${contextPath}/resources/summernote-0.8.18-dist/summernote.min.css">
 <script src="${contextPath}/resources/summernote-0.8.18-dist/summernote.min.js"></script>
 <script src="${contextPath}/resources/summernote-0.8.18-dist/lang/summernote-ko-KR.min.js"></script>
+
+<!-- include moment.js 이런게 제이쿼리를 쓴다면 제이쿼리 cdn 아래 있어줘야 함. 쓰는지 안쓰는지 모르겠으면 걍 아래에 두면 된다 ㅎㅎ-->
+<script src="${contextPath}/resources/moment/moment-with-locales.min.js"></script>
 
 <!-- header footer 나눠줄 거임 jspstudy/02_jsp/src/main/webapp/pkg03_include/ 여기서 했었던 내용 -->
 <!-- include custom css/js css 파일 따로 빼주고 경로 링크 걸어줌~~~ -->
@@ -63,7 +68,7 @@
      <div class="gnb-wrap">
       <ul class="gnb">
         <li><a href="${contextPath}/bbs/list.do"> 계층형 게시판 </a></li>
-        <li><a href="${contextPath}/blog/list.do"> 댓글형 게시판</a></li>
+        <li><a href="${contextPath}/blog/list.page"> 댓글형 게시판</a></li>
         <li><a href="${contextPath}/"> 첨부형 게시판</a></li>
         <li><a href="${contextPath}/"> 마이페이지</a></li>
       </ul>
