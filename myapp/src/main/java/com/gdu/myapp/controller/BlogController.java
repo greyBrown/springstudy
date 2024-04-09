@@ -95,10 +95,11 @@ public class BlogController {
     return "redirect:/blog/detail.do?blogNo=" + blogNo;
   }
   
-  @PostMapping(value="/comment/modifyComment.do")
-  public String modifyComment(@RequestParam int commentNo, int blogNo) {
-    blogService.removeComment(commentNo);
-    return "redirect:/blog/detail.do?blogNo=" + blogNo;
+  @PostMapping(value="/modify.do")
+  public String modifyComment(HttpServletRequest request) {
+    blogService.modifyBlog(request);
+    return "redirect:/blog/list.page";
+   // return "redirect:/blog/detail.do?blogNo=" + request.getParameter("blogNo");
   }
   
 

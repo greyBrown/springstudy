@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdu.myapp.dto.BlogDto;
 import com.gdu.myapp.dto.CommentDto;
@@ -225,5 +226,23 @@ public class BlogServiceImpl implements BlogService {
 
     return blogMapper.removeComment(commentNo);
   }
+  
+  @Override
+  public int modifyBlog(HttpServletRequest request) {
+    // 요청 파라미터
+    String title = request.getParameter("title");
+    String contents = request.getParameter("contents");
+    int blogNo = Integer.parseInt(request.getParameter("blogNo"));
+    
+    BlogDto updateBlog = BlogDto.builder()
+                     .title(MySecurityUtils.getPreventXss(title))
+                     .contents(MySecurityUtils.getPreventXss(contents))
+                     .blogNo(blogNo)
+                   .build();
+    
+   
+    return blogMapper.updateBlog(updateBlog);
+  }
+  
   
 }

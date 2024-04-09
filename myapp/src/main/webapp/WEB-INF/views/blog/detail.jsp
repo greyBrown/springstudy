@@ -35,6 +35,15 @@
   <span>${blog.contents}</span>
 </div>
 
+<div>
+<button type=button class="btn btn-secondary btn-modify">수정</button>
+</div>
+
+<div>
+ <button type=button class="btn btn-warning btn-modify">삭제</button>
+</div>
+
+
 <hr>
 
 <form id="frm-comment">
@@ -91,6 +100,16 @@ const fnRegisterComment = () => {
 }
 
 // 전역 변수
+
+const fnModifyBlog = () => {
+    $(document).on('click', '.btn-modify', (evt) => {
+       location.href = '${contextPath}/blog/modify.do?blogNo=' + ${blog.blogNo};
+    })
+  }
+
+
+
+
 var page = 1;
 
 const fnCommentList = () => {
@@ -131,7 +150,6 @@ const fnCommentList = () => {
 			  // 삭제 버튼 (작성한 댓글에만 삭제 버튼이 생성됨)
 			  if(Number('${sessionScope.user.userNo}') === comment.user.userNo){ // === 는 타입도 맞춰야 하기때문에 Number() 로 싸준다
 				  str += '<button type="button" class="btn btn-danger btn-remove" data-comment-no="'+comment.commentNo+'">삭제</button>';
-				  str += '<button type="button" class="btn btn-secondary btn-modify">수정</button>';
 			  }
 			  /******************************답글 입력 화면***********************************/
 			   if(comment.depth === 0) { // if 문 아래 아래 코드들을 넣어줌으로써 2차 답글은 달지 못하게 된다. depth === 0 즉 최초댓글에 대한  답댓만 달 수 있음!
@@ -167,11 +185,7 @@ const fnRemoveReply = () => {
     })
   }
   
-const fnModifyReply = () => {
-    $(document).on('click', '.btn-modify', (evt) => {
-       location.href = '${contextPath}/blog/comment/modifyComment.do?commentNo=' + evt.target.dataset.commentNo + '&blogNo=' + ${blog.blogNo};
-    })
-  }
+
   
 
 
@@ -210,7 +224,7 @@ fnRegisterComment();
 fnCommentList();
 fnRegisterReply();
 fnRemoveReply();
-fnModifyReply();
+fnModifyBlog();
 
 </script>
 

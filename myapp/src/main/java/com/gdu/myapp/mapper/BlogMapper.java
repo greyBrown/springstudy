@@ -20,4 +20,5 @@ public interface BlogMapper {
  List<CommentDto> getCommentList(Map<String, Object> map);  // 이 map에는 3개의 정보가 들어있음! blogNo begin end
  int insertReply(CommentDto comment);
  int removeComment(int commentNo);
+ int updateBlog(BlogDto blog);
 }

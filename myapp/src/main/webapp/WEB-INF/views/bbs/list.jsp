@@ -106,7 +106,7 @@
  
  const fnBtnRemove = () => {
 	    $('.btn-remove').on('click', (evt) => {
-	      if(confirm('게시글을 삭제할까요?')) {
+	      if(confirm($(evt.target).val() + '게시글을 삭제할까요?')) {
 	        location.href = '${contextPath}/bbs/removeBbs.do?bbsNo=' + $(evt.target).next().val(); // 저번엔 데이터속성으로 btn에 줘서 삭제했었음! 
 	      }
 	    })

@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gdu.myapp.dto.BlogDto;
 
@@ -22,5 +23,6 @@ public interface BlogService {
   Map<String, Object> getCommentList(HttpServletRequest request);
   int registerReply(HttpServletRequest request);
   int removeComment(int commentNo);
+  int modifyBlog(HttpServletRequest request);
   
 }
