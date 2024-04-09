@@ -61,7 +61,7 @@ const fnGetBlogList = () => {
 	  success: (resData) => {     // resData = {"blogList": [], "totalPage": 10} 스크롤이 증가하는건 최대 totalPage 까지임.
 			totalPage = resData.totalPage;
 			 $.each(resData.blogList, (i, blog) => {
-	    	let str = '<div class="blog" data-blog-no="'+ blog.blogNo +'">';
+	    	let str = '<div class="blog" data-user-no="'+ blog.user.userNo +'" data-blog-no="'+ blog.blogNo +'">';
 	    	str += '<span>' + blog.title + '</span>';
 	    	str += '<span>' + blog.user.email + '</span>';
 	    	str += '<span>' + blog.hit + '</span>';
@@ -127,9 +127,16 @@ const fnScrollHandler = () => {
 	  $(document).on('click', '.blog', (evt) => {
 		 // <div class="blog"> 중 클릭 이벤트가 발생한 <div> : 이벤트 대상
 	   //  alert(evt.target.dataset.blogNo)=alert($(evt.target).data('blogNo'))
+	   //  alert(evt.target.dataset.userNo)=alert($(evt.target).data('userNo'))
+	   
+	   // 내가 작성한 블로그는 /detail.do 요청 (조회수 증가가 없음)
+	   // 남이 작성한 블로그는 /updateHit.do 요청 (조회수 증가함)
+	   // resData에서 data-set 을 심어주는 것부터 해야함 ajax의 영향권이 아니기에 여기엔 그 데이터가 없기 때문.
+     if('${sessionScope.user.userNo}' === evt.target.dataset.userNo){
 		  location.href = '${contextPath}/blog/detail.do?blogNo=' + evt.target.dataset.blogNo;
-	   
-	   
+     } else {
+    	location.href = '${contextPath}/blog/updateHit.do?blogNo=' + evt.target.dataset.blogNo;
+     }	   
 	  })
   }
   

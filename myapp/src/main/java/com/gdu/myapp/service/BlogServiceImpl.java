@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.stream.events.Comment;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.gdu.myapp.dto.BlogDto;
+import com.gdu.myapp.dto.CommentDto;
 import com.gdu.myapp.dto.UserDto;
 import com.gdu.myapp.mapper.BlogMapper;
 import com.gdu.myapp.utils.MyFileUtils;
@@ -135,8 +137,93 @@ public class BlogServiceImpl implements BlogService {
   }
   
   @Override
+  public int updateHit(int blogNo) {
+    return blogMapper.updateHit(blogNo);
+  }
+  
+  
+  
+  @Override
   public BlogDto getBlogByNo(int blogNo) {
     return blogMapper.getBlogByNo(blogNo);
+  }
+  
+  @Override
+  public int registerComment(HttpServletRequest request) {
+
+    // 요청 파라미터
+   String contents = MySecurityUtils.getPreventXss(request.getParameter("contents"));
+   int blogNo = Integer.parseInt(request.getParameter("blogNo"));
+   int userNo = Integer.parseInt(request.getParameter("userNo"));
+   
+   // UserDto 객체 생성
+   UserDto user = new UserDto();
+   user.setUserNo(userNo);
+   
+   // CommentDto 객체 생성
+   CommentDto comment = CommentDto.builder()
+                          .contents(contents)
+                          .user(user)
+                          .blogNo(blogNo)
+                          .build();
+   
+   // DB 에 저장 & 결과 반환
+    return blogMapper.insertComment(comment);
+  }
+  
+  @Override
+  public Map<String, Object> getCommentList(HttpServletRequest request) {
+   
+   // 요청 파라미터
+    int blogNo = Integer.parseInt(request.getParameter("blogNo"));
+    int page =  Integer.parseInt(request.getParameter("page"));
+    
+    // 전체 댓글 개수
+    int total = blogMapper.getCommentCount(blogNo);
+    
+    // 한 페이지에 표시할 댓글 개수
+    int display = 10;
+    
+    // 페이징 처리
+    myPageUtils.setPaging(total, display, page);
+    
+    // 목록을 가져올 때 사용할 Map 생성
+    Map<String, Object> map = Map.of("blogNo", blogNo, "begin", myPageUtils.getBegin(), "end", myPageUtils.getEnd());
+    
+    // 결과 (목록, 페이징) 반환. ajax 처리를 위해 myPageUtils 에 만들어두었던 getAsyncPaging. 주소가 아닌 자바스크립트 함수 호출이 달려있다!
+    return Map.of("commentList", blogMapper.getCommentList(map)
+                 , "paging", myPageUtils.getAsyncPaging());
+  }
+  
+  @Override
+  public int registerReply(HttpServletRequest request) {
+    
+    // 요청 파라미터
+    String contents = request.getParameter("contents");
+    int groupNo = Integer.parseInt(request.getParameter("groupNo"));
+    int blogNo = Integer.parseInt(request.getParameter("blogNo"));
+    int userNo = Integer.parseInt(request.getParameter("userNo"));
+    
+    // UserDto 객체 생성
+    UserDto user = new UserDto();
+    user.setUserNo(userNo);
+    
+    // CommentDto 객체 생성
+    CommentDto reply = CommentDto.builder()
+                         .contents(contents)
+                         .groupNo(groupNo)
+                         .blogNo(blogNo)
+                         .user(user)
+                         .build();
+    
+    // DB 에 저장하고 결과 반환
+    return blogMapper.insertReply(reply);
+  }
+  
+  @Override
+  public int removeComment(int commentNo) {
+
+    return blogMapper.removeComment(commentNo);
   }
   
 }

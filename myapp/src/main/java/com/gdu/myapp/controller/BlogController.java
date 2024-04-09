@@ -4,6 +4,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,6 +54,12 @@ public class BlogController {
     return blogService.getBlogList(request);
   }
   
+  @GetMapping("/updateHit.do")
+  public String updateHit(@RequestParam int blogNo) {
+    blogService.updateHit(blogNo);
+    return "redirect:/blog/detail.do?blogNo=" + blogNo;  // detail 은 blogNo 을 매개변수로 넘겨줘야 한다!! 이런거 잘 해줘야 한다 안그러면 뭐야 왜 안되는데 뭔데 사태가 벌어진다
+  }
+  
   
   @GetMapping("/detail.do")
   public String detail(@RequestParam int blogNo, Model model) {
@@ -62,11 +69,39 @@ public class BlogController {
   
   @PostMapping(value="/registerComment.do", produces = "application/json")
   public ResponseEntity<Map<String, Object>> registerComment(HttpServletRequest request){
-    System.out.println(request.getParameter("contents"));
-    System.out.println(request.getParameter("blogNo"));
-    System.out.println(request.getParameter("userNo"));
-    return new ResponseEntity<>(null);
+   
+    
+    //return new ResponseEntity<Map<String,Object>>(Map.of("insertCount", blogService.registerComment(request))
+    //                                                     , HttpStatus.OK);
+    
+    // 좀 더 간략한 버전을 이제 사용해 봅시다! 마지막 OK를 따로 추가할 필요없이 바로 추가해준 메소드
+    return ResponseEntity.ok(Map.of("insertCount", blogService.registerComment(request)));
   }
+  
+  @GetMapping(value="/comment/list.do", produces = "application/json")
+  public ResponseEntity<Map<String, Object>> commentList(HttpServletRequest request){
+    return new ResponseEntity<>(blogService.getCommentList(request), HttpStatus.OK);
+  }
+  
+  
+  @PostMapping(value="/comment/registerReply.do", produces = "application/json")
+  public  ResponseEntity<Map<String, Object>> registerReply(HttpServletRequest request){
+    return ResponseEntity.ok(Map.of("insertReplyCount", blogService.registerReply(request)));
+  }
+  
+  @GetMapping(value="/comment/removeComment.do")
+  public String removeComment(@RequestParam int commentNo, int blogNo) {
+    blogService.removeComment(commentNo);
+    return "redirect:/blog/detail.do?blogNo=" + blogNo;
+  }
+  
+  @PostMapping(value="/comment/modifyComment.do")
+  public String modifyComment(@RequestParam int commentNo, int blogNo) {
+    blogService.removeComment(commentNo);
+    return "redirect:/blog/detail.do?blogNo=" + blogNo;
+  }
+  
+
   
   
   

@@ -16,6 +16,11 @@ public interface BlogService {
   int registerBlog(HttpServletRequest request);  //  복습 : 파라미터로 Request, RequestParam(변수가 많아지면 별로다), CommandObj 셋 중 하나로 받을 수 있다. 하지만 이번에도 request 로...^^!
   ResponseEntity<Map<String, Object>> getBlogList(HttpServletRequest request);
   // 만약 목록을 10개만 가져가자 ~ 하면 List도 가능한 선택이겠지만 +alpha로 가져갈 것 이기 때문에 Map 으로 간다 
+  int updateHit(int blogNo);
   BlogDto getBlogByNo(int blogNo);
+  int registerComment(HttpServletRequest request);
+  Map<String, Object> getCommentList(HttpServletRequest request);
+  int registerReply(HttpServletRequest request);
+  int removeComment(int commentNo);
   
 }

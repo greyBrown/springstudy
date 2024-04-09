@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CommentDto {
 
-  private int commentNo, depth, groupNo, blogNo;
+  private int commentNo, depth, groupNo, blogNo, state;
   private String contents;
   private Timestamp createDt;
   private UserDto user;
