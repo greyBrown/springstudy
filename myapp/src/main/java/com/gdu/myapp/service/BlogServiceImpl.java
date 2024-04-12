@@ -228,20 +228,9 @@ public class BlogServiceImpl implements BlogService {
   }
   
   @Override
-  public int modifyBlog(HttpServletRequest request) {
-    // 요청 파라미터
-    String title = request.getParameter("title");
-    String contents = request.getParameter("contents");
-    int blogNo = Integer.parseInt(request.getParameter("blogNo"));
-    
-    BlogDto updateBlog = BlogDto.builder()
-                     .title(MySecurityUtils.getPreventXss(title))
-                     .contents(MySecurityUtils.getPreventXss(contents))
-                     .blogNo(blogNo)
-                   .build();
-    
-   
-    return blogMapper.updateBlog(updateBlog);
+  public int modifyBlog(int blogNo) {
+    // TODO Auto-generated method stub
+    return 0;
   }
   
   

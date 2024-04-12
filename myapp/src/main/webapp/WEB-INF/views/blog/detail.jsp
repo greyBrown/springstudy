@@ -40,7 +40,7 @@
 </div>
 
 <div>
- <button type=button class="btn btn-warning btn-modify">삭제</button>
+ <button type=button class="btn btn-warning btn-remove">삭제</button>
 </div>
 
 
@@ -103,7 +103,7 @@ const fnRegisterComment = () => {
 
 const fnModifyBlog = () => {
     $(document).on('click', '.btn-modify', (evt) => {
-       location.href = '${contextPath}/blog/modify.do?blogNo=' + ${blog.blogNo};
+       location.href = '${contextPath}/blog/modify.page?blogNo=' + ${blog.blogNo};
     })
   }
 

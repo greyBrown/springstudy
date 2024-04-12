@@ -23,6 +23,6 @@ public interface BlogService {
   Map<String, Object> getCommentList(HttpServletRequest request);
   int registerReply(HttpServletRequest request);
   int removeComment(int commentNo);
-  int modifyBlog(HttpServletRequest request);
+  int modifyBlog(int blogNo);
   
 }

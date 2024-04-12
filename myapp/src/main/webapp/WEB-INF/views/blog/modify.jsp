@@ -29,12 +29,12 @@
   </div>
  
  <div>
-   <textarea id="contents" name="contents" value="${blog.contents}"></textarea>
+   <textarea id="contents" name="contents">${blog.contents}</textarea>
  </div>
  
  <div>
  <input type="hidden" name="userNo" value="${sessionScope.user.userNo}">
- <button type="submit">작성완료</button>
+ <button type="submit">수정완료</button>
  <a href="${contextPath}/blog/list.page"><button type="button">작성취소</button></a>
  </div>
  
