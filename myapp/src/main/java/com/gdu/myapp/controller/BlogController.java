@@ -95,6 +95,7 @@ public class BlogController {
     return "redirect:/blog/detail.do?blogNo=" + blogNo;
   }
   
+  //이러면 안된다는걸 깨달음 ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ blogNo 가지고 modify.page 가는 맵핑이 하나있고, 거기서 modify.do 하는 맵핑이 있어야함. 
   @PostMapping(value="/modify.do")
   public String modifyComment(HttpServletRequest request) {
     blogService.modifyBlog(request);

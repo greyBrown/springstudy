@@ -68,7 +68,7 @@
       <ul class="gnb">
         <li><a href="${contextPath}/bbs/list.do"> 계층형 게시판 </a></li>
         <li><a href="${contextPath}/blog/list.page"> 댓글형 게시판</a></li>
-        <li><a href="${contextPath}/"> 첨부형 게시판</a></li>
+        <li><a href="${contextPath}/upload/list.do"> 첨부형 게시판</a></li>
         <li><a href="${contextPath}/"> 마이페이지</a></li>
       </ul>
      </div>

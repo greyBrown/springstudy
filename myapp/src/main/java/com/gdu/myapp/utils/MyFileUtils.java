@@ -33,12 +33,15 @@ public class MyFileUtils {
     return UUID.randomUUID().toString().replace("-", "") + extName;       //UUID가 이런 이름 만들때 여러모로 짧고 보안성 높고 좋음. 근데 하이픈이 쭈루룩 생기니까 지워준다.                                                            
   }
   
+  // 임시 파일 경로 반환
+  public String getTempPath() {
+    return "/temporary";
+  }
   
-  
-  
-  
-  
-  
+  // 임시 파일 이름 반환 (확장자 제외)
+  public String getTempFilename() {
+    return System.currentTimeMillis() + "";
+  }
   
   
 }
