@@ -11,7 +11,7 @@
  <h1 class="title">업로드 작성화면</h1>
  
  
- <form id="frm-upload-regiser"
+ <form id="frm-upload-register"
        method="POST"
        enctype="multipart/form-data"
        action = "${contextPath}/upload/register.do">

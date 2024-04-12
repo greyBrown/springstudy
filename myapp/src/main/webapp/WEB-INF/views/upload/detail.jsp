@@ -44,6 +44,7 @@
     <c:if test="${sessionScope.user.userNo == upload.user.userNo}">
       <form id="frm-btn" method="POST">  
         <input type="hidden" name="uploadNo" value="${upload.uploadNo}">
+        <!-- form에 들어있는 상태 -> 즉 submit으로 이동한다. -->
         <button type="button" id="btn-edit" class="btn btn-warning btn-sm">편집</button>
         <button type="button" id="btn-remove" class="btn btn-danger btn-sm">삭제</button>
       </form>
@@ -91,19 +92,42 @@ const fnDownload = () => {
 	  })
 	}
 
-	const fnDownloadAll = () => {
+const fnDownloadAll = () => {
 	  document.getElementById('download-all').addEventListener('click', (evt) => {
 	    if(!confirm('모두 다운로드 할까요?')) {
-	    	//!confirm 임. 만약 yes를 누른다면/upload/downloadAll.do?uploadNo=$upload.uploadNo 작성해놓은 이게 작동되고 아니요를 누르면 preventDefault
+	        <%--confirm 임. 만약 yes를 누른다면/upload/downloadAll.do?uploadNo=$upload.uploadNo 작성해놓은 이게 작동되고 아니요를 누르면 preventDefault--%>
 	      evt.preventDefault();
-	      return; // 리턴은 사실 있어도 그만 없어도 그만. 리턴은 다음 코드 실행을 막는건데 여기 다음코드가 없다.
+	       return; // 리턴은 사실 있어도 그만 없어도 그만. 리턴은 다음 코드 실행을 막는건데 여기 다음코드가 없다.
 	    }
 	  })
 	}
 
+
+	// 전역 객체
+	var frmBtn = document.getElementById('frm-btn');
+
+	const fnEditUpload = () => {
+	  document.getElementById('btn-edit').addEventListener('click', (evt) => {
+	    frmBtn.action = '${contextPath}/upload/edit.do';
+	    frmBtn.submit();
+	  })
+	}
+
+	const fnAfterModifyUpdate = () => {
+	  const updateCount = '${updateCount}';
+	  if(updateCount !== '') {
+	    if(updateCount === '1') {
+	      alert('게시글이 수정되었습니다.');
+	    } else {
+	      alert('게시글이 수정되지 않았습니다.');
+	    }
+	  }
+	}
+
+	fnEditUpload();
+	fnAfterModifyUpdate();
 	fnDownload();
 	fnDownloadAll();
-
 
 </script>
 

@@ -1,11 +1,16 @@
 package com.gdu.myapp.service;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -263,13 +268,134 @@ public class UploadServiceImpl implements UploadService {
   }
   
   @Override
-  public ResponseEntity<Resource> downloadALL(HttpServletRequest request) {
-
-    return null;
+  public ResponseEntity<Resource> downloadAll(HttpServletRequest request) {
+    
+    // 다운로드할 모든 첨부 파일들의 정보를 DB 에서 가져오기
+    int uploadNo = Integer.parseInt(request.getParameter("uploadNo"));
+    List<AttachDto> attachList = uploadMapper.getAttachList(uploadNo);
+    
+    // 첨부 파일이 없으면 종료
+    if(attachList.isEmpty()) {
+      return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND);
+    }
+    
+    // 임시 zip 파일 저장할 경로
+    File tempDir = new File(myFileUtils.getTempPath());
+    if (!tempDir.exists()) {
+     tempDir.mkdirs(); 
+    }
+    
+    // 임시 zip 파일 이름
+    String tempFilename = myFileUtils.getTempFilename() + ".zip";
+    
+    // 임시 zip 파일 File 객체
+    File tempfile = new File(tempDir, tempFilename);
+    
+    // 첨부 파일들을 하나씩 zip 파일로 모으기
+    try {
+      
+      // ZipOutputStream 객체 생성
+      ZipOutputStream zout = new ZipOutputStream(new FileOutputStream(tempfile));
+      
+      for (AttachDto attach : attachList) {
+        
+        // zip 파일에 포함할 ZipEntry 객체 생성
+        ZipEntry zipEntry = new ZipEntry(attach.getOriginalFilename()); // zip 파일에 들어갈 개별 파일의 이름
+        
+        // zip 파일에 ZipEntry 객체 명단 추가 (파일의 이름만 등록한 상황)
+        zout.putNextEntry(zipEntry);
+        
+        // 실제 첨부 파일을 zip 파일에 등록 (첨부 파일을 읽어서 zip 파일로 보냄. 읽어들이는 건 InputStream) 
+        BufferedInputStream in = new BufferedInputStream(new FileInputStream(new File(attach.getUploadPath(), attach.getFilesystemName())));
+        zout.write(in.readAllBytes());  // 싹 다 읽어오는 메소드
+        
+        // 사용한 자원 정리
+        in.close();
+        zout.closeEntry();
+        
+        // DOWNLOAD_COUNT 증가
+        uploadMapper.updateDownloadCount(attach.getAttachNo());
+        
+      } // for문 종료
+      
+      // zout 자원 반납
+      zout.close();
+      
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    
+    // 다운로드 할 zip File 객체 -> Resource 객체
+     Resource resource = new FileSystemResource(tempfile);
+    
+     // 임시파일의 이름이 숫자(TIMPESTAMP)로 되어있기 때문에 인코딩을 할 필요가 없다.
+     
+     // 다운로드용 응답 헤더 설정 (HTTP 참조)
+     HttpHeaders responseHeader = new HttpHeaders();
+     responseHeader.add("Content-Type", "application/octet-stream");
+     responseHeader.add("Content-Disposition", "attachment; filename=" + tempFilename);
+     responseHeader.add("Content-Length", tempfile.length() + ""); //file.length()가 long 이라서 "" 더해서 String 으로 만들어줌
+     
+     
+     // 다운로드 진행
+     return new ResponseEntity<Resource>(resource, responseHeader, HttpStatus.OK);
+    
+  }
+  
+  @Override
+  public void removeTempFiles() {
+    // 임시 폴더의 모든 파일 제거
+    
+   String tempDir = myFileUtils.getTempPath();
+   File tempfile = new File(tempDir);
+   File[] tempFiles = tempfile.listFiles();
+   if(tempFiles != null) {
+   for(File file : tempFiles) {
+     file.delete();
+   }
+  }
+  }
+  
+  @Override
+  public UploadDto getUploadByNo(int uploadNo) {
+    return uploadMapper.getUploadByNo(uploadNo);
+  }
+  
+  @Override
+  public int modifyUpload(UploadDto upload) {
+    return uploadMapper.updateUpload(upload);
+  }
+  
+  @Override
+  public ResponseEntity<Map<String, Object>> getAttachList(int uploadNo) {
+    return ResponseEntity.ok(Map.of("attachList", uploadMapper.getAttachList(uploadNo)));
+  }
+  
+  @Override
+  public ResponseEntity<Map<String, Object>> removeAttach(int attachNo) {
+    
+    // 삭제할 첨부 파일 정보를 DB 에서 가져오기
+    AttachDto attach = uploadMapper.getAttachByNo(attachNo);
+    
+    // 파일 삭제
+    File file = new File(attach.getUploadPath(), attach.getFilesystemName());
+    if(file.exists()) {
+      file.delete();
+    }
+    
+    
+    // 썸네일 삭제
+    if(attach.getHasThumbnail() == 1) {
+      File thumbnail = new File(attach.getUploadPath(), "s_" + attach.getFilesystemName());
+      if(thumbnail.exists()) {
+        thumbnail.delete();
+      }
+    }
+    
+    // DB 삭제
+    int deleteCount = uploadMapper.deleteAttach(attachNo);
+    return ResponseEntity.ok(Map.of("deleteCount", deleteCount));
   }
   
   
-  
-  
-
 }
